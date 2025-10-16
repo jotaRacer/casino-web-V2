@@ -1,0 +1,26 @@
+{
+  "name": "casino-web-v2",
+  "version": "1.0.0",
+  "description": "Segunda entrega de casino web :)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jotaRacer/casino-web-V2.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jotaRacer/casino-web-V2/issues"
+  },
+  "homepage": "https://github.com/jotaRacer/casino-web-V2#readme",
+  "dependencies": {
+    "body-parser": "^2.2.0",
+    "cookie-parser": "^1.4.7",
+    "express-handlebars": "^8.0.3",
+    "mongoose": "^8.19.1"
+  }
+}

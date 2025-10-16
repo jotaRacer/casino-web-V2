@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Perfil de Usuario</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <nav class="navbar">
+        <div class="navbar-left">
+            <img src="logocasino.png" alt="Logo del Casino" class="logo-img">
+        </div>
+        <div class="navbar-center">
+            <ul>
+                <li><a href="home.html">Home</a></li>
+                <li><a href="casino.html">Casino</a></li>
+                <li><a href="rules.html">Reglas</a></li>
+                <li><a href="transaccion.html">Depósito</a></li>
+                <li><a href="about.html">Nosotros</a></li>
+                <li><a href="perfil.html">Perfil</a></li>
+            </ul>
+        </div>
+        <div class="navbar-right">
+            <a href="singIn.html" class="perfil-btn">Registrarse</a>
+            <a href="Login.html" class="login-btn">Iniciar sesión</a>
+        </div>
+    </nav>
+
+  <div class="box-perfil-container">
+
+  <div class="perfil-header">
+<h1>{{email}}</h1>
+    <p class="correo">{{email}}</p>
+  </div>
+
+  <div class="perfil-info">
+    <h2>Información Personal</h2>
+    <p><strong>Fecha de nacimiento:</strong> {{fechaNacimiento}}</p>
+    <p><strong>Ciudad:</strong> Santiago, Chile</p>
+  </div>
+
+  <div class="perfil-saldo">
+    <h2>Saldo Actual</h2>
+    <p class="saldo">${{saldo}}</p>
+  </div>
+
+  <div class="perfil-transacciones">
+    <h2>Últimas 5 Transacciones</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Fecha</th>
+          <th>Tipo</th>
+          <th>Monto</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each transacciones}}
+        <tr>
+          <td>{{this.fecha}}</td>
+          <td>{{this.tipo}}</td>
+          <td>${{this.monto}}</td>
+        </tr>
+{{/each}}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="perfil-actions">
+    <a href="/casino" class="btn-ruleta">Ir a la Mesa de Ruleta</a>
+    <a href="#" class="btn-ruleta">Editar perfil</a>
+    {{! Botón para cerrar sesión }}
+    <a href="/logout" class="btn-ruleta">Cerrar Sesión</a>
+  </div>
+</div>
+
+</body>
+</html>

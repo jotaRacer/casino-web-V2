@@ -1,54 +1,23 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inicio de sesión</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-   <nav class="navbar">
-        <div class="navbar-left">
-            <img src="logocasino.png" alt="Logo del Casino" class="logo-img">
-        </div>
-        <div class="navbar-center">
-            <ul>
-                <li><a href="home.html">Home</a></li>
-                <li><a href="casino.html">Casino</a></li>
-                <li><a href="rules.html">Reglas</a></li>
-                <li><a href="transaccion.html">Depósito</a></li>
-                <li><a href="about.html">Nosotros</a></li>
-                <li><a href="perfil.html">Perfil</a></li>
-            </ul>
-        </div>
-        <div class="navbar-right">
-            <a href="singIn.html" class="perfil-btn">Registrarse</a>
-            <a href="Login.html" class="login-btn">Iniciar sesión</a>
-        </div>
-    </nav>
+<form action="/login" method="post" class="login-form">
+    <div class="login-box">
+        <h1 class="login-title">Inicio de Sesión</h1>
 
-    </nav>
-
-    <form method="post" class="login-form">
-
-        <div class="login-box">
-            <h1 class="login-title">Inicio de Sesión</h1>
-
-            <div class="login-form-group">
-                <label for="login-username">Nombre de usuario</label>
-                <input type="text" id="username" name="email" placeholder="Ingrese su usuario" class="login-input" required>
-            </div>
-
-            <div class="login-form-group">
-                <label for="login-password">Contraseña</label>
-                <input type="password" id="login-password" name="password" placeholder="Ingrese su contraseña" class="login-input" required>
-            </div>
-                <button type="submit" class="login-submit-btn">Iniciar sesión</button>
-
-            <p class="login-alt-link">¿No tienes cuenta? <a href="/register">Regístrate</a></p>
-            <a class="login-forgot" href="/forgot-password">¿Olvidaste tu contraseña?</a>
+        <div class="login-form-group">
+            <label for="login-email">Correo Electrónico</label>
+            {{! El 'name="email"' es crucial para que el servidor reciba el dato }}
+            <input type="email" id="login-email" name="email" placeholder="Ingrese su correo" class="login-input" required>
         </div>
 
-    </form>
-</body>
-</html>
+        <div class="login-form-group">
+            <label for="login-password">Contraseña</label>
+            {{! El 'name="password"' también es crucial }}
+            <input type="password" id="login-password" name="password" placeholder="Ingrese su contraseña" class="login-input" required>
+        </div>
+
+        <button type="submit" class="login-submit-btn">Iniciar sesión</button>
+
+        <p class="login-alt-link">¿No tienes cuenta? <a href="/register">Regístrate</a></p>
+        <a class="login-forgot" href="/forgot-password">¿Olvidaste tu contraseña?</a>
+    </div>
+</form>
+

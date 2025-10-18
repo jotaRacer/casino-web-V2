@@ -1,159 +1,151 @@
-const express = require('express')
-const { engine } = require('express-handlebars')
-const bodyParser = require('body-parser')
+const express = require('express');
+const { engine } = require('express-handlebars');
 const cookieParser = require('cookie-parser');
+const mongoose = require('mongoose');
 
-const app = express()
+// --- 1. CONFIGURACIÓN INICIAL ---
+const app = express();
+const port = 3000;
 
+// Middlewares para leer datos del cliente
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-const port = 3000
+// Configurar Handlebars con layout por defecto
+app.engine('handlebars', engine({ defaultLayout: 'main' }));
+app.set('view engine', 'handlebars');
+app.set('views', './views');
 
-//mongo db
-
-const mongoose = require('mongoose')
-
+// --- 2. CONEXIÓN A LA BASE DE DATOS (MONGODB) ---
 mongoose.connect('mongodb+srv://jokum:290804@joaquin.o9eq1qt.mongodb.net/?retryWrites=true&w=majority&appName=Joaquin', {
   useNewUrlParser: true,
   useUnifiedTopology: true
 })
 .then(() => {
-  console.log('Conexión exitosa a MongoDB Atlas')
+  console.log('Conexión exitosa a MongoDB Atlas');
 })
 .catch(err => {
-  console.error('Error conectando a MongoDB', err)
-})
+  console.error('Error conectando a MongoDB', err);
+});
 
+// --- 3. DEFINICIÓN DEL MODELO DE USUARIO ---
 const UsuarioSchema = new mongoose.Schema({
   email: String,
   password: String,
   dob: String
-})
-const Usuario = mongoose.model('Usuario', UsuarioSchema)
+});
+const Usuario = mongoose.model('Usuario', UsuarioSchema);
 
-app.post('/register', async (req, res) => {
-  const { email, password, dob } = req.body
-  const nuevoUsuario = new Usuario({ email, password, dob })
-  await nuevoUsuario.save()
-  res.redirect('/perfil')
-})
 
-app.post('/login', async (req, res) => {
-  const { email, password } = req.body
-
-  try {
-    const usuario = await Usuario.findOne({ email, password })
-
-    if (!usuario) {
-      return res.send('Credenciales inválidas. <a href="/login">Intentar de nuevo</a>')
+// --- 4. MIDDLEWARE PARA VERIFICAR EL USUARIO EN CADA PETICIÓN ---
+// (Esto hace que la barra de navegación dinámica funcione)
+app.use(async (req, res, next) => {
+    const userEmail = req.cookies.userEmail;
+    if (userEmail) {
+        const usuario = await Usuario.findOne({ email: userEmail }).lean();
+        if (usuario) {
+            res.locals.user = { email: usuario.email };
+        }
     }
+    next();
+});
 
+
+// --- 5. RUTAS DE AUTENTICACIÓN ---
+
+// Ruta para MOSTRAR el formulario de registro
+app.get('/register', (req, res) => {
+  res.render('register'); // Necesitas un archivo register.hbs
+});
+
+// Ruta para PROCESAR el registro
+app.post('/register', async (req, res) => {
+  const { email, password, dob } = req.body;
+  // (Aquí deberías añadir una comprobación para ver si el email ya existe)
+  const nuevoUsuario = new Usuario({ email, password, dob });
+  await nuevoUsuario.save();
+  res.redirect('/login');
+});
+
+// Ruta para MOSTRAR el formulario de login
+app.get('/login', (req, res) => {
+  res.render('login');
+});
+
+// Ruta para PROCESAR el login
+app.post('/login', async (req, res) => {
+  const { email, password } = req.body;
+  try {
+    const usuario = await Usuario.findOne({ email, password });
+    if (!usuario) {
+      return res.send('Credenciales inválidas. <a href="/login">Intentar de nuevo</a>');
+    }
     res.cookie('userEmail', usuario.email, {
-      maxAge: 900000,
+      maxAge: 900000, // 15 minutos
       httpOnly: true
     });
-
     res.redirect('/perfil');
-
   } catch (err) {
-    console.error('Error al buscar usuario:', err)
-    res.send('Error interno del servidor')
+    console.error('Error al buscar usuario:', err);
+    res.send('Error interno del servidor');
   }
-})
+});
 
-//perfil de usuario
+// Ruta para CERRAR sesión
+app.get('/logout', (req, res) => {
+    res.clearCookie('userEmail');
+    res.redirect('/login');
+});
+
+
+// --- 6. RUTAS DE LAS PÁGINAS PRINCIPALES ---
+
+// Ruta raíz, redirige al home
+app.get('/', (req, res) => {
+  res.redirect('/home');
+});
+
+// Ruta para la página de perfil del usuario
 app.get('/perfil', async (req, res) => {
   const userEmail = req.cookies.userEmail;
   if (!userEmail) {
     return res.redirect('/login');
   }
-
   try {
     const usuarioEncontrado = await Usuario.findOne({ email: userEmail });
     if (!usuarioEncontrado) {
       res.clearCookie('userEmail');
       return res.redirect('/login');
     }
-
     const datosParaLaVista = {
       email: usuarioEncontrado.email,
       fechaNacimiento: usuarioEncontrado.dob,
-      ciudad: "Santiago, Chile",
-      saldo: 500000,
-      transacciones: [
+      ciudad: "Santiago, Chile", // Dato de ejemplo
+      saldo: 500000, // Dato de ejemplo
+      transacciones: [ // Datos de ejemplo
         { fecha: "01/09/2025", tipo: "Depósito", monto: 100000 },
         { fecha: "30/08/2025", tipo: "Apuesta", monto: -20000 }
       ]
     };
-
     res.render('perfil', datosParaLaVista);
-
   } catch (err) {
     console.error("Error al buscar perfil de usuario:", err);
     res.send("Error al cargar el perfil.");
   }
 });
 
-// index.js (añade esta nueva ruta)
+// Rutas para las otras páginas (debes crear los archivos .hbs correspondientes)
+//app.get('/home', (req, res) => { res.render('home'); });
+//app.get('/casino', (req, res) => { res.render('casino'); });
+//app.get('/rules', (req, res) => { res.render('rules'); });
+//app.get('/transaccion', (req, res) => { res.render('transaccion'); });
+//app.get('/about', (req, res) => { res.render('about'); });
+app.get('/perfil', (req, res) => { res.render('perfil'); });
 
-app.get('/welcome', (req, res) => {
-  // Leemos la cookie 'userEmail' que creamos en el login
-  const userEmail = req.cookies.userEmail;
 
-  if (userEmail) {
-    // Si la cookie existe, el usuario está "logueado"
-    // Renderizamos la vista y le pasamos el email para mostrarlo
-    res.render('welcome', { email: userEmail });
-  } else {
-    // Si no hay cookie, no tiene permiso, lo mandamos al login
-    res.redirect('/login');
-  }
+// --- 7. INICIAR EL SERVIDOR ---
+app.listen(port, () => {
+  console.log(`App corriendo en http://localhost:${port}`);
 });
 
-// Configurar Handlebars con layout por defecto
-app.engine('handlebars', engine({ defaultLayout: 'main' }))
-app.set('view engine', 'handlebars')
-app.set('views', './views')
-
-// Leer datos de formularios
-app.use(bodyParser.urlencoded({ extended: true }))
-
-// "Base de datos" temporal
-const usuarios = []
-
-// Registro
-app.get('/register', (req, res) => {
-  res.render('register')
-})
-
-app.post('/register', (req, res) => {
-  const { email, password } = req.body
-  const existe = usuarios.find(u => u.username === email)
-  if (existe) return res.send('Usuario ya existe. <a href="/register">Volver</a>')
-  usuarios.push({ email, password })
-  console.log(usuarios)
-  res.redirect('/login')
-})
-
-// Login
-app.get('/login', (req, res) => {
-  res.render('login')
-})
-
-app.post('/login', (req, res) => {
-  const { username, password } = req.body
-  const usuario = usuarios.find(u => u.username === username && u.password === password)
-  if (!usuario) return res.send('Credenciales inválidas. <a href="/login">Intentar de nuevo</a>')
-  res.render('welcome', { username })
-})
-
-// Ruta raíz
-app.get('/', (req, res) => {
-  res.redirect('/login')
-})
-
-app.listen(port, () => {
-  console.log(`App corriendo en http://localhost:${port}`)
-})

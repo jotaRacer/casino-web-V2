@@ -1,8 +1,8 @@
 <div class="box-perfil-container">
 
   <div class="perfil-header">
-    <h1>{{email}}</h1>
-    <p class="correo">{{email}}</p>
+    <h1>{{user.email}}</h1>
+    <p class="correo">{{user.email}}</p>
   </div>
 
   <div class="perfil-info">
@@ -13,7 +13,7 @@
 
   <div class="perfil-saldo">
     <h2>Saldo Actual</h2>
-    <p class="saldo">${{saldo}}</p>
+    <p class="saldo">{{formatCLP (defaultZero user.saldo)}}</p>
   </div>
 
   <div class="perfil-transacciones">

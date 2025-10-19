@@ -51,6 +51,57 @@
           align-items: center;
           padding: 0 40px;
         }
+        /* hace que TODO quede en una sola línea y sin subrayado */
+.wallet-chip{
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;         /* quita la línea del <a> */
+  white-space: nowrap;           /* evita quiebres */
+}
+
+/* icono + saldo, alineados */
+.wallet-left{
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* avatar */
+.avatar{
+  width: 28px;                   /* ajusta tamaño a gusto (28–36) */
+  height: 28px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.avatar-img{
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  background: transparent;
+}
+
+/* saldo como UNA sola pieza (símbolo + número) */
+.saldo{
+  display: inline-flex;
+  align-items: baseline;
+  gap: 4px;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 1;
+  color: #22c55e;                /* verde */
+}
+
+/* agrega el símbolo $ dentro del mismo span para que no salte de línea */
+.saldo::before{
+  content: '$';
+}
+
+/* separa el botón para que no se pegue encima */
+.login-btn{ margin-left: 12px; }
+
 
         .navbar-left {
           position: absolute;
@@ -852,17 +903,25 @@
         </div>
         <div class="navbar-center">
             <ul>
-                <li><a href="/home">Home</a></li>
-                <li><a href="/casino">Casino</a></li>
-                <li><a href="/rules">Reglas</a></li>
-                <li><a href="/transaccion">Depósito</a></li>
-                <li><a href="/about">Nosotros</a></li>
+                <li><a href="/">Home</a></li>
+                <li><a href="/ruleta">Ruleta</a></li>
+                <li><a href="/reglas">Reglas</a></li>
+                <li><a href="/deposito">Depósito</a></li>
+                <li><a href="/nosotros">Nosotros</a></li>
             </ul>
         </div>
         <div class="navbar-right">
             {{#if user}}
-                <a href="/perfil" class="perfil-btn">{{user.email}}</a>
-                <a href="/logout" class="login-btn">Cerrar sesión</a>
+                <a href="perfil" class="wallet-chip" id="openModalBtn">
+                <div class="wallet-left">
+                  <div class="avatar">
+                      <img src="/images/user-icon.svg"  class="avatar-img">
+                      <span class="status-dot" title="Conectado"></span>
+                </div>
+              <span class="saldo">{{formatCLP (defaultZero user.saldo)}}</span>
+      </div>
+                </a>
+
             {{else}}
                 <a href="/register" class="perfil-btn">Registrarse</a>
                 <a href="/login" class="login-btn">Iniciar sesión</a>

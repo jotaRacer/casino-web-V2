@@ -7,13 +7,29 @@ const mongoose = require('mongoose');
 const app = express();
 const port = 3000;
 
+const path = require('path');
+const { title } = require('process');
+app.use(express.static(path.join(__dirname, 'public')));
+
 // Middlewares para leer datos del cliente
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 // Configurar Handlebars con layout por defecto
-app.engine('handlebars', engine({ defaultLayout: 'main' }));
+app.engine('handlebars', engine({ 
+  defaultLayout: 'main',
+  helpers: {
+    defaultZero: v => (v == null || isNaN(v) ? 0 : Number(v)),
+    formatCLP: v =>
+      new Intl.NumberFormat('es-CL', {
+        style: 'decimal',
+        currency: 'CLP',
+        maximumFractionDigits: 0
+      }).format(Number(v ?? 0)),
+  },
+
+ }));
 app.set('view engine', 'handlebars');
 app.set('views', './views');
 
@@ -33,19 +49,21 @@ mongoose.connect('mongodb+srv://jokum:290804@joaquin.o9eq1qt.mongodb.net/?retryW
 const UsuarioSchema = new mongoose.Schema({
   email: String,
   password: String,
+  saldo: { type: Number, default: 0 },
   dob: String
 });
 const Usuario = mongoose.model('Usuario', UsuarioSchema);
-
 
 // --- 4. MIDDLEWARE PARA VERIFICAR EL USUARIO EN CADA PETICIÓN ---
 // (Esto hace que la barra de navegación dinámica funcione)
 app.use(async (req, res, next) => {
     const userEmail = req.cookies.userEmail;
     if (userEmail) {
-        const usuario = await Usuario.findOne({ email: userEmail }).lean();
+        const usuario = await Usuario.findOne({ email: userEmail })
+        .select('-password') // Excluir el campo password
+        .lean();
         if (usuario) {
-            res.locals.user = { email: usuario.email };
+            res.locals.user = usuario;
         }
     }
     next();
@@ -72,6 +90,22 @@ app.post('/register', async (req, res) => {
 app.get('/login', (req, res) => {
   res.render('login');
 });
+
+app.get('/nosotros', (req, res) => {
+  res.render('about',{ title: 'Sobre Nosotros' });
+});
+app.get('/deposito', (req, res) => {
+  res.render('deposit',{ title: 'Depositar' });
+});
+app.get('/reglas', (req, res) => {
+  res.render('rules',{ title: 'Reglas' });
+});
+
+app.get('/ruleta', (req, res) => {
+  res.render('roulette',{ title: 'Ruleta' });
+});
+
+
 
 // Ruta para PROCESAR el login
 app.post('/login', async (req, res) => {
@@ -103,7 +137,7 @@ app.get('/logout', (req, res) => {
 
 // Ruta raíz, redirige al home
 app.get('/', (req, res) => {
-  res.redirect('/home');
+  res.render('home');
 });
 
 // Ruta para la página de perfil del usuario

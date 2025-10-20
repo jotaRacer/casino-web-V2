@@ -50,7 +50,12 @@ const UsuarioSchema = new mongoose.Schema({
   email: String,
   password: String,
   saldo: { type: Number, default: 0 },
-  dob: String
+  dob: String,
+  transacciones : [{
+    fecha: { type: Date, default: Date.now },
+    tipo: String,
+    monto: Number
+  }]
 });
 const Usuario = mongoose.model('Usuario', UsuarioSchema);
 
@@ -94,8 +99,33 @@ app.get('/login', (req, res) => {
 app.get('/nosotros', (req, res) => {
   res.render('about',{ title: 'Sobre Nosotros' });
 });
-app.get('/deposito', (req, res) => {
-  res.render('deposit',{ title: 'Depositar' });
+app.get('/deposito', async (req, res) => {
+  const userEmail = req.cookies.userEmail;
+  if (!userEmail) return res.redirect('/login');
+
+  try {
+    const usuario = await Usuario.findOne({ email: userEmail });
+    if (!usuario) {
+      res.clearCookie('userEmail');
+      return res.redirect('/login');
+    }
+
+    res.render('deposito', {
+      title: 'Depositar',
+      saldo: usuario.saldo ?? 0,
+      transacciones: (usuario.transacciones || [])
+        .slice(-5)
+        .reverse()
+        .map(t => ({
+          fecha: (new Date(t.fecha)).toLocaleDateString('es-CL'),
+          tipo: t.tipo,
+          monto: t.monto
+        }))
+    });
+  } catch (err) {
+    console.error(err);
+    res.send('Error al cargar la página de depósito');
+  }
 });
 app.get('/reglas', (req, res) => {
   res.render('rules',{ title: 'Reglas' });
@@ -155,12 +185,13 @@ app.get('/perfil', async (req, res) => {
     const datosParaLaVista = {
       email: usuarioEncontrado.email,
       fechaNacimiento: usuarioEncontrado.dob,
-      ciudad: "Santiago, Chile", // Dato de ejemplo
-      saldo: 500000, // Dato de ejemplo
-      transacciones: [ // Datos de ejemplo
-        { fecha: "01/09/2025", tipo: "Depósito", monto: 100000 },
-        { fecha: "30/08/2025", tipo: "Apuesta", monto: -20000 }
-      ]
+      ciudad: "Santiago, Chile",
+      saldo: usuarioEncontrado.saldo ?? 0,
+      transacciones: (usuarioEncontrado.transacciones || []).slice(-5).reverse().map(t => ({
+      fecha: (new Date(t.fecha)).toLocaleDateString('es-CL'),
+      tipo: t.tipo,
+      monto: t.monto
+  }))
     };
     res.render('perfil', datosParaLaVista);
   } catch (err) {
@@ -169,13 +200,68 @@ app.get('/perfil', async (req, res) => {
   }
 });
 
-// Rutas para las otras páginas (debes crear los archivos .hbs correspondientes)
+// --- DEPÓSITO ---
+app.post('/depositar', async (req, res) => {
+  const userEmail = req.cookies.userEmail;
+  const amount = Number(req.body.amount);
+
+  if (!userEmail) return res.status(401).json({ error: "No autenticado" });
+  if (isNaN(amount) || amount <= 0) return res.status(400).json({ error: "Monto inválido" });
+
+  try {
+    const usuario = await Usuario.findOne({ email: userEmail });
+    if (!usuario) return res.status(404).json({ error: "Usuario no encontrado" });
+
+    usuario.saldo = (usuario.saldo || 0) + amount;
+
+    usuario.transacciones.push({ tipo: 'depósito', monto: amount, fecha: new Date() });
+
+    await usuario.save();
+
+    res.json({ nuevoSaldo: usuario.saldo });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Error al depositar" });
+  }
+});
+
+
+// --- RETIRO ---
+app.post('/retirar', async (req, res) => {
+  const userEmail = req.cookies.userEmail;
+  const amount = Number(req.body.amount);
+
+  if (!userEmail) return res.status(401).json({ error: "No autenticado" });
+  if (isNaN(amount) || amount <= 0) return res.status(400).json({ error: "Monto inválido" });
+
+  try {
+    const usuario = await Usuario.findOne({ email: userEmail });
+    if (!usuario) return res.status(404).json({ error: "Usuario no encontrado" });
+
+    if (usuario.saldo < amount) {
+      return res.status(400).json({ error: "Saldo insuficiente" });
+    }
+
+    usuario.saldo -= amount;
+
+    usuario.transacciones.push({ tipo: 'retiro', monto: amount, fecha: new Date() });
+
+    await usuario.save();
+
+    res.json({ nuevoSaldo: usuario.saldo });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Error al retirar" });
+  }
+});
+
+// Rutas para las otras páginas 
 //app.get('/home', (req, res) => { res.render('home'); });
 //app.get('/casino', (req, res) => { res.render('casino'); });
 //app.get('/rules', (req, res) => { res.render('rules'); });
 //app.get('/transaccion', (req, res) => { res.render('transaccion'); });
 //app.get('/about', (req, res) => { res.render('about'); });
-app.get('/perfil', (req, res) => { res.render('perfil'); });
+//app.get('/perfil', (req, res) => { res.render('perfil'); });
 
 
 // --- 7. INICIAR EL SERVIDOR ---

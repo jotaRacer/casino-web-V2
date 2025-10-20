@@ -1,0 +1,67 @@
+<div class="container2">
+    <h1 class="titulo-transaccion">Depósito</h1>
+    <div class="saldo">Saldo Actual: $<span id="balance">0.00</span></div>
+
+    <div class="card-transaccion">
+      <form id="transactionForm">
+        <label for="amount">Ingrese la cantidad de dinero a depositar:</label>
+        <input type="number" id="amount" name="amount" placeholder="$0.00" required />
+        <button type="submit" class="submit-btn2">Confirme monto y comience a jugar</button>
+      </form>
+    </div>
+
+    <div class="card-transaccion">
+      <form id="withdrawForm">
+        <label for="amount2">Ingrese la cantidad de dinero que desea retirar:</label>
+        <input type="number" id="amount2" name="amount2" placeholder="$0.00" required />
+        <button type="submit" class="submit-btn2">Confirme monto y retire su dinero</button>
+      </form>
+    </div>
+  </div>
+  <script>
+  // --- DEPÓSITO ---
+  document.getElementById('transactionForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const amount = parseFloat(document.getElementById('amount').value);
+    if (isNaN(amount) || amount <= 0) return alert("Monto inválido");
+
+    const res = await fetch('/depositar', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ amount })
+    });
+
+    const data = await res.json();
+    if (data.nuevoSaldo !== undefined) {
+      document.getElementById('balance').textContent = data.nuevoSaldo;
+      alert("Depósito exitoso 💰");
+      document.getElementById('amount').value = '';
+    } else {
+      alert("Error al depositar");
+    }
+  });
+
+  // --- RETIRO ---
+  document.getElementById('withdrawForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const amount2 = parseFloat(document.getElementById('amount2').value);
+    if (isNaN(amount2) || amount2 <= 0) return alert("Monto inválido");
+
+    const res = await fetch('/retirar', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ amount: amount2 })
+    });
+
+    const data = await res.json();
+    if (data.nuevoSaldo !== undefined) {
+      document.getElementById('balance').textContent = data.nuevoSaldo;
+      alert("Retiro exitoso 🏦");
+      document.getElementById('amount2').value = '';
+    } else {
+      alert("Error al retirar");
+    }
+  });
+</script>

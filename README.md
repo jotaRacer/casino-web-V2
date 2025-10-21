@@ -1,5 +1,5 @@
 # casino-web-V2
-Segunda entrega de casino web :)
+Segunda entrega de casino web :)  uwu 
 
 ## Dependencias iniciales
 

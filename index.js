@@ -131,10 +131,6 @@ app.get('/reglas', (req, res) => {
   res.render('rules',{ title: 'Reglas' });
 });
 
-app.get('/ruleta', (req, res) => {
-  res.render('roulette',{ title: 'Ruleta' });
-});
-
 
 
 // Ruta para PROCESAR el login
@@ -252,6 +248,103 @@ app.post('/retirar', async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Error al retirar" });
+  }
+});
+
+// --- Ruleta ---
+const ROULETTE_CLIENT_JS = `
+(function(){
+  function init(){
+    console.log('[roulette] client loaded');
+
+    var container = document.querySelector('.casino-ruleta-numbers-grid');
+    var btn = document.getElementById('girar');
+
+    if (!container || !btn) {
+      console.warn('[roulette] faltan elementos del DOM:', { hasContainer: !!container, hasBtn: !!btn });
+      return;
+    }
+
+    var STEP = 360 / (container.children.length || 37);
+    var spinDeg = 0;
+
+    function toast(msg){
+      var rect = container.getBoundingClientRect();
+      var bubble = document.createElement('div');
+      bubble.className = 'bubble-ruleta';
+      bubble.textContent = msg;
+      document.body.appendChild(bubble);
+      bubble.style.left = (rect.left + rect.width/2) + 'px';
+      bubble.style.top  = (rect.top + window.scrollY - 10) + 'px';
+      requestAnimationFrame(function(){ bubble.classList.add('show'); });
+      setTimeout(function(){
+        bubble.classList.remove('show');
+        bubble.addEventListener('transitionend', function(){ bubble.remove(); }, {once:true});
+      }, 1600);
+    }
+
+    container.style.willChange = 'transform';
+
+    btn.addEventListener('click', function(){
+      var extra = 360 * (4 + Math.floor(Math.random()*4)) + Math.floor(Math.random()*360);
+      spinDeg += extra;
+      container.style.transition = 'transform 3s cubic-bezier(0.17, 0.67, 0.12, 0.99)';
+      container.style.transform  = 'rotate(' + spinDeg + 'deg)';
+    });
+
+    container.addEventListener('transitionend', function(e){
+      if (e.propertyName !== 'transform') return;
+
+      var a = ((spinDeg % 360) + 360) % 360;
+      var idx = Math.round((360 - a) / STEP) % (container.children.length || 37);
+      if (idx < 0) idx += (container.children.length || 37);
+
+      var ganadorEl = container.children[idx];
+      if (!ganadorEl) {
+        console.warn('[roulette] no encontré la rebanada para idx', idx);
+        return;
+      }
+
+      var numero = (ganadorEl.textContent || '').trim();
+
+      var status = document.querySelector('.status-ruleta');
+      if (status) status.textContent = 'Resultado: ' + numero;
+
+      Array.prototype.forEach.call(container.children, function(el){
+        el.classList.remove('winner-ruleta');
+      });
+      ganadorEl.classList.add('winner-ruleta');
+
+      toast('¡Salió el ' + numero + '!');
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+`;
+
+app.get('/js/roulette.js', (req, res) => {
+  res.type('application/javascript').send(ROULETTE_CLIENT_JS);
+});
+
+app.get('/ruleta', async (req, res) => {
+  const userEmail = req.cookies.userEmail;
+  if (!userEmail) return res.redirect('/login');
+
+  try {
+    const usuario = await Usuario.findOne({ email: userEmail }).lean();
+    if (!usuario) {
+      res.clearCookie('userEmail');
+      return res.redirect('/login');
+    }
+    res.render('roulette', { title: 'Ruleta', saldo: usuario.saldo ?? 0 });
+  } catch (err) {
+    console.error(err);
+    res.send('Error al cargar la ruleta');
   }
 });
 

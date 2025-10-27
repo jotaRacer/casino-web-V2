@@ -830,69 +830,299 @@
 
         /* ================= RULETA ================= */
         .ruleta-header {
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            padding: 3rem 1rem;
-            gap: 2rem;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 3rem 1rem;
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
 
-        .area-ruleta {
-            flex: 2;
-            background-color: #1A1A1A;
-            border: 2px solid #C9A227;
-            border-radius: 0.75rem;
-            padding: 2rem;
-            text-align: center;
-        }
+.area-ruleta {
+    flex: 2;
+    background-color: #1A1A1A;
+    border: 2px solid #C9A227;
+    border-radius: 0.75rem;
+    padding: 2rem;
+    text-align: center;
+}
 
-        .titulo-ruleta {
-            font-size: 2rem;
-            font-weight: bold;
-            color: #C9A227;
-            margin-bottom: 1.5rem;
-        }
+.titulo-ruleta {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #C9A227;
+    margin-bottom: 1.5rem;
+}
 
-        .ruleta-image {
-            max-width: 100%;
-            border-radius: 0.5rem;
-        }
+.ruleta-image {
+    max-width: 100%;
+    border-radius: 0.5rem;
+}
 
-        .sidebar {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
-        }
+/* ================= SIDEBAR ================= */
+.sidebar {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
 
-        .ruleta-info-card {
-            background-color: #1A1A1A;
-            border: 2px solid #C9A227;
-            border-radius: 0.5rem;
-            padding: 1.25rem;
-        }
+.ruleta-info-card {
+    background-color: #1A1A1A;
+    border: 2px solid #C9A227;
+    border-radius: 0.5rem;
+    padding: 1.25rem;
+    margin-top: 30px;
+}
 
-        .titulo-info-ruleta {
-            font-size: 1.25rem;
-            font-weight: bold;
-            color: #C9A227;
-            margin-bottom: 0.75rem;
-        }
+.titulo-info-ruleta {
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: #C9A227;
+    margin-bottom: 0.75rem;
+}
 
-        .status-ruleta {
-            font-size: 1.1rem;
-            color: #E0E0E0;
-        }
+.status-ruleta {
+    font-size: 1.1rem;
+    color: #E0E0E0;
+    margin-bottom: 0.5rem;
+}
 
-        .casino-ruleta-numbers-grid {
-            display: flex;
-        }
+.balance-ruleta {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #4CAF50;
+}
 
-        footer {
-          margin-top: auto; 
-        }
+/* ================= ÚLTIMOS NÚMEROS ================= */
+.casino-ruleta-numbers-grid {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.casino-ruleta-number {
+    width: 2.5rem;
+    height: 2.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    font-weight: bold;
+    color: #fff;
+}
+
+.casino-ruleta-number-red {
+    background-color: #B71C1C;
+}
+
+.casino-ruleta-number-black {
+    background-color: #0A0A0A;
+    border: 1px solid #E0E0E0;
+}
+
+.casino-ruleta-number-green {
+    background-color: #388E3C;
+}
+
+/* ================= TABLA DE APUESTAS ================= */
+.apuestas-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 0.75rem;
+    font-size: 0.95rem;
+}
+
+.apuestas-table th {
+    background-color: #C9A227;
+    color: #121212;
+    padding: 0.75rem;
+    text-align: left;
+}
+
+.apuestas-table td {
+    padding: 0.65rem;
+    border-top: 1px solid #333;
+}
+
+.apuestas-table tr:nth-child(even) {
+    background-color: #1E1E1E;
+}
+
+/* ================= RESPONSIVE ================= */
+@media (max-width: 900px) {
+    .ruleta-header {
+        flex-direction: column;
+        align-items: center;
+    }
+    .sidebar {
+        width: 100%;
+    }
+}
+
+
+
+/* CONTENEDOR (igual al tuyo) */
+.casino-ruleta-numbers-grid {
+  height: 350px;
+  width: 350px;
+  background: #0A0A0A;
+  position: relative;
+  border-radius: 50%;
+  left: calc(50% - 175px);
+  overflow: hidden;
+  transition: 0.5s all;
+}
+.casino-ruleta-numbers-grid div {
+  height: 50%;                          
+  width: calc(350px * 0.095);          
+  clip-path: polygon(100% 0, 50% 100%, 0 0);
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform-origin: bottom;         
+  transform: translate(-50%, -100%) rotate(0deg);
+  display: flex;
+  align-items: flex-start;
+  padding-top: 30px;
+  justify-content: center;
+  font-family: monospace;
+  font-weight: 1000;
+  font-size: 12px;                       
+  letter-spacing: 2px;
+  color: #fff;
+}
+
+.casino-ruleta-numbers-grid > div:nth-child(1){ background: #0ea52a; }
+.casino-ruleta-numbers-grid > div:nth-child(n+2):nth-child(even){ background: #d3122b; }
+.casino-ruleta-numbers-grid > div:nth-child(n+2):nth-child(odd){  background: #1a1a1a; }
+
+.casino-ruleta-numbers-grid .cero{
+  background-color: green;
+  transform: translate(-50%, -100%) rotate(calc(360deg/37 * 0));}
+.casino-ruleta-numbers-grid .treintaydos    { 
+  transform: translate(-50%, -100%) rotate(calc(360deg/37 * 1)); }
+.casino-ruleta-numbers-grid .quince         { 
+  transform: translate(-50%, -100%) rotate(calc(360deg/37 * 2)); }
+.casino-ruleta-numbers-grid .diecinueve     { 
+  transform: translate(-50%, -100%) rotate(calc(360deg/37 * 3)); }
+.casino-ruleta-numbers-grid .cuatro         { 
+  transform: translate(-50%, -100%) rotate(calc(360deg/37 * 4)); }
+.casino-ruleta-numbers-grid .veintiuno      { 
+  transform: translate(-50%, -100%) rotate(calc(360deg/37 * 5)); }
+.casino-ruleta-numbers-grid .dos            { 
+  transform: translate(-50%, -100%) rotate(calc(360deg/37 * 6)); }
+.casino-ruleta-numbers-grid .veinticinco    { 
+  transform: translate(-50%, -100%) rotate(calc(360deg/37 * 7)); }
+.casino-ruleta-numbers-grid .diecisiete     { 
+  transform: translate(-50%, -100%) rotate(calc(360deg/37 * 8)); }
+.casino-ruleta-numbers-grid .treintaycuatro { 
+  transform: translate(-50%, -100%) rotate(calc(360deg/37 * 9)); }
+.casino-ruleta-numbers-grid .seis           { 
+  transform: translate(-50%, -100%) rotate(calc(360deg/37 * 10)); }
+.casino-ruleta-numbers-grid .veintisiete    { 
+  transform: translate(-50%, -100%) rotate(calc(360deg/37 * 11)); }
+.casino-ruleta-numbers-grid .trece          { 
+  transform: translate(-50%, -100%) rotate(calc(360deg/37 * 12)); }
+.casino-ruleta-numbers-grid .treintayseis   { 
+  transform: translate(-50%, -100%) rotate(calc(360deg/37 * 13)); }
+.casino-ruleta-numbers-grid .one            { 
+  transform: translate(-50%, -100%) rotate(calc(360deg/37 * 14)); } 
+.casino-ruleta-numbers-grid .treinta        { 
+  transform: translate(-50%, -100%) rotate(calc(360deg/37 * 15)); }
+.casino-ruleta-numbers-grid .ocho           { 
+  transform: translate(-50%, -100%) rotate(calc(360deg/37 * 16)); }
+.casino-ruleta-numbers-grid .veintitres     { 
+  transform: translate(-50%, -100%) rotate(calc(360deg/37 * 17)); }
+.casino-ruleta-numbers-grid .diez           { 
+  transform: translate(-50%, -100%) rotate(calc(360deg/37 * 18)); }
+.casino-ruleta-numbers-grid .cinco          { 
+  transform: translate(-50%, -100%) rotate(calc(360deg/37 * 19)); }
+.casino-ruleta-numbers-grid .veinticuatro   { 
+  transform: translate(-50%, -100%) rotate(calc(360deg/37 * 20)); }
+.casino-ruleta-numbers-grid .dieciseis      { 
+  transform: translate(-50%, -100%) rotate(calc(360deg/37 * 21)); }
+.casino-ruleta-numbers-grid .treintaytres   { 
+  transform: translate(-50%, -100%) rotate(calc(360deg/37 * 22)); }
+.casino-ruleta-numbers-grid .uno            { 
+  transform: translate(-50%, -100%) rotate(calc(360deg/37 * 23)); }
+.casino-ruleta-numbers-grid .veinte         { 
+  transform: translate(-50%, -100%) rotate(calc(360deg/37 * 24)); }
+.casino-ruleta-numbers-grid .catornce       { 
+  transform: translate(-50%, -100%) rotate(calc(360deg/37 * 25)); } 
+.casino-ruleta-numbers-grid .treintayuno    { 
+  transform: translate(-50%, -100%) rotate(calc(360deg/37 * 26)); }
+.casino-ruleta-numbers-grid .nueve          { 
+  transform: translate(-50%, -100%) rotate(calc(360deg/37 * 27)); }
+.casino-ruleta-numbers-grid .veintidos      { 
+  transform: translate(-50%, -100%) rotate(calc(360deg/37 * 28)); }
+.casino-ruleta-numbers-grid .deciocho       { 
+  transform: translate(-50%, -100%) rotate(calc(360deg/37 * 29)); } 
+.casino-ruleta-numbers-grid .veintinueve    { 
+  transform: translate(-50%, -100%) rotate(calc(360deg/37 * 30)); }
+.casino-ruleta-numbers-grid .siete          { 
+  transform: translate(-50%, -100%) rotate(calc(360deg/37 * 31)); }
+.casino-ruleta-numbers-grid .veintiocho     { 
+  transform: translate(-50%, -100%) rotate(calc(360deg/37 * 32)); }
+.casino-ruleta-numbers-grid .doce           { 
+  transform: translate(-50%, -100%) rotate(calc(360deg/37 * 33)); }
+.casino-ruleta-numbers-grid .treintaycinco  { 
+  transform: translate(-50%, -100%) rotate(calc(360deg/37 * 34)); }
+.casino-ruleta-numbers-grid .tres           { 
+  transform: translate(-50%, -100%) rotate(calc(360deg/37 * 35)); }
+.casino-ruleta-numbers-grid .veintiseis     { 
+  transform: translate(-50%, -100%) rotate(calc(360deg/37 * 36)); }
+
+#girar {
+  height: 60px;
+  width: 150px;
+  background: #B71C1C;
+  color: #E0E0E0;
+  border-radius: 8px;
+  cursor: pointer;
+  border: none;
+  margin-top: 30px;
+  font-size: 30px;
+  font-weight: 1000px;
+}
+
+  .stopper {
+  height: 20px;
+  width: 30px;
+  background: #C9A227;
+  position: absolute;
+  margin-top: -440px;
+  left: calc(50% - 15px);
+  clip-path: polygon(100% 0, 50% 100%, 0 0);
+  box-shadow: 0 0 15px rgba(201,162,39,0.6);
+  
+}
+
+.casino-ruleta-numbers-grid .winner-ruleta{
+  outline: 3px solid #ffd700;
+  filter: brightness(1.15);
+  z-index: 2;
+}
+
+.bubble-ruleta{
+  position: absolute;
+  transform: translate(-50%, -120%);
+  padding: 8px 12px;
+  background: rgba(0,0,0,.85);
+  color: #fff;
+  font: 700 14px/1 system-ui, -apple-system, Segoe UI, Roboto, Arial;
+  border-radius: 10px;
+  box-shadow: 0 6px 18px rgba(0,0,0,.35);
+  opacity: 0;
+  transition: opacity .2s ease, transform .2s ease;
+  pointer-events: none;
+}
+.bubble-ruleta.show{
+  opacity: 1;
+  transform: translate(-50%, -140%);
+}
+
 
     </style>
 </head>

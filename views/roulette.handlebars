@@ -1,0 +1,122 @@
+<header class="ruleta-header">
+  <div class="area-ruleta">
+
+    <section class="ruleta-section">
+      <h2 class="titulo-ruleta">Tablero de ruleta Europea</h2>
+
+      <div class="casino-ruleta-board">
+        <div class="casino-ruleta-numbers-grid">
+          <div class="cero">0</div>
+          <div class="treintaydos">32</div>
+          <div class="quince">15</div>
+          <div class="diecinueve">19</div>
+          <div class="cuatro">4</div>
+          <div class="veintiuno">21</div>
+          <div class="dos">2</div>
+          <div class="veinticinco">25</div>
+          <div class="diecisiete">17</div>
+          <div class="treintaycuatro">34</div>
+          <div class="seis">6</div>
+          <div class="veintisiete">27</div>
+          <div class="trece">13</div>
+          <div class="treintayseis">36</div>
+          <div class="one">11</div>
+          <div class="treinta">30</div>
+          <div class="ocho">8</div>
+          <div class="veintitres">23</div>
+          <div class="diez">10</div>
+          <div class="cinco">5</div>
+          <div class="veinticuatro">24</div>
+          <div class="dieciseis">16</div>
+          <div class="treintaytres">33</div>
+          <div class="uno">1</div>
+          <div class="veinte">20</div>
+          <div class="catornce">14</div>
+          <div class="treintayuno">31</div>
+          <div class="nueve">9</div>
+          <div class="veintidos">22</div>
+          <div class="deciocho">18</div>
+          <div class="veintinueve">29</div>
+          <div class="siete">7</div>
+          <div class="veintiocho">28</div>
+          <div class="doce">12</div>
+          <div class="treintaycinco">35</div>
+          <div class="tres">3</div>
+          <div class="veintiseis">26</div>
+        </div>
+
+        <button id="girar">Girar</button>
+        <div class="stopper"></div>
+      </div>
+    </section>
+
+    <aside class="sidebar">
+      <div class="ruleta-info-card">
+        <h3 class="titulo-info-ruleta">Estado del Juego</h3>
+        <div class="status-ruleta">Recibiendo apuestas...</div>
+        <p>Tiempo restante: 30 segundos</p>
+      </div>
+
+      <div class="ruleta-info-card">
+        <h3 class="titulo-info-ruleta">Saldo Disponible</h3>
+        <div class="balance-ruleta">
+            ${{formatCLP (defaultZero saldo)}}
+        </div>
+      </div>
+
+      <div class="ruleta-info-card">
+        <h3 class="titulo-info-ruleta">Últimos 5 números ganadores</h3>
+        <div class="casino-ruleta-numbers">
+          <div class="casino-ruleta-number casino-ruleta-number-red">23</div>
+          <div class="casino-ruleta-number casino-ruleta-number-black">8</div>
+          <div class="casino-ruleta-number casino-ruleta-number-red">14</div>
+          <div class="casino-ruleta-number casino-ruleta-number-green">0</div>
+          <div class="casino-ruleta-number casino-ruleta-number-black">31</div>
+        </div>
+      </div>
+
+      <div class="ruleta-info-card">
+        <h3 class="titulo-info-ruleta">Historial de Apuestas</h3>
+        <table class="apuestas-table">
+          <thead>
+            <tr>
+              <th>Tipo de Apuesta</th>
+              <th>Monto</th>
+              <th>Resultado</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Apuesta a número 23</td>
+              <td>$10.000</td>
+              <td>Ganada</td>
+            </tr>
+            <tr>
+              <td>Apuesta a color Rojo</td>
+              <td>$20.000</td>
+              <td>Perdida</td>
+            </tr>
+            <tr>
+              <td>Apuesta a número 3</td>
+              <td>$15.000</td>
+              <td>Ganada</td>
+            </tr>
+            <tr>
+              <td>Apuesta a color Rojo</td>
+              <td>$25.000</td>
+              <td>Perdida</td>
+            </tr>
+            <tr>
+              <td>Apuesta a color Negro</td>
+              <td>$30.000</td>
+              <td>Ganada</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </aside>
+
+  </div>
+</header>
+
+<script src="/js/roulette.js" defer></script>

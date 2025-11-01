@@ -827,25 +827,30 @@
             line-height: 1.6;
             color: #B0BEC5;
         }
-
-        /* ================= RULETA ================= */
-        .ruleta-header {
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    padding: 3rem 1rem;
-    gap: 2rem;
-    max-width: 1200px;
-    margin: 0 auto;
+/* ================= RULETA ================= */
+.ruleta-superior {
+  display: flex;        
+  flex-direction: row;        
+  align-items: flex-start;      
+  justify-content: center;      
+  gap: 40px;            
+  width: 100%;
+  max-width: 1400px; /* <-- AÑADIDO: Límite de ancho */
+  margin: 40px auto 0; /* <-- CAMBIADO: Centra el contenedor */
 }
-
 .area-ruleta {
-    flex: 2;
-    background-color: #1A1A1A;
-    border: 2px solid #C9A227;
-    border-radius: 0.75rem;
-    padding: 2rem;
-    text-align: center;
+  flex: 2;
+  background-color: #1A1A1A;
+  border: 2px solid #C9A227;
+  border-radius: 0.75rem;
+  padding: 2rem;
+  
+  /* --- 👇 LÍNEAS IMPORTANTES A AÑADIR --- */
+  position: relative;     /* Permite posicionar el indicador DENTRO de este bloque */
+  display: flex;
+  flex-direction: column;
+  align-items: center;    /* Centra la ruleta horizontalmente */
+  gap: 15px;              /* Un pequeño espacio entre el título y la ruleta */
 }
 
 .titulo-ruleta {
@@ -853,11 +858,6 @@
     font-weight: bold;
     color: #C9A227;
     margin-bottom: 1.5rem;
-}
-
-.ruleta-image {
-    max-width: 100%;
-    border-radius: 0.5rem;
 }
 
 /* ================= SIDEBAR ================= */
@@ -895,111 +895,97 @@
     color: #4CAF50;
 }
 
-/* ================= ÚLTIMOS NÚMEROS ================= */
-.casino-ruleta-numbers-grid {
-    display: flex;
-    gap: 0.5rem;
-    flex-wrap: wrap;
-}
 
-.casino-ruleta-number {
-    width: 2.5rem;
-    height: 2.5rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 50%;
-    font-weight: bold;
-    color: #fff;
-}
-
-.casino-ruleta-number-red {
-    background-color: #B71C1C;
-}
-
-.casino-ruleta-number-black {
-    background-color: #0A0A0A;
-    border: 1px solid #E0E0E0;
-}
-
-.casino-ruleta-number-green {
-    background-color: #388E3C;
-}
-
-/* ================= TABLA DE APUESTAS ================= */
-.apuestas-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 0.75rem;
-    font-size: 0.95rem;
-}
-
-.apuestas-table th {
-    background-color: #C9A227;
-    color: #121212;
-    padding: 0.75rem;
-    text-align: left;
-}
-
-.apuestas-table td {
-    padding: 0.65rem;
-    border-top: 1px solid #333;
-}
-
-.apuestas-table tr:nth-child(even) {
-    background-color: #1E1E1E;
-}
 
 /* ================= RESPONSIVE ================= */
 @media (max-width: 900px) {
-    .ruleta-header {
-        flex-direction: column;
-        align-items: center;
-    }
     .sidebar {
         width: 100%;
     }
 }
 
-
-
 /* CONTENEDOR (igual al tuyo) */
 .casino-ruleta-numbers-grid {
-  height: 350px;
-  width: 350px;
+  height: 450px; /* <-- CAMBIADO */
+  width: 450px;  /* <-- CAMBIADO */
   background: #0A0A0A;
   position: relative;
   border-radius: 50%;
-  left: calc(50% - 175px);
+  left: calc(50% - 225px); /* <-- CAMBIADO (225 es la mitad de 450) */
   overflow: hidden;
   transition: 0.5s all;
 }
 .casino-ruleta-numbers-grid div {
-  height: 50%;                          
-  width: calc(350px * 0.095);          
+  height: 50%;            
+  width: calc(450px * 0.095); /* <-- CAMBIADO (usa la nueva base de 450px) */
   clip-path: polygon(100% 0, 50% 100%, 0 0);
   position: absolute;
   left: 50%;
   top: 50%;
-  transform-origin: bottom;         
+  transform-origin: bottom;      
   transform: translate(-50%, -100%) rotate(0deg);
   display: flex;
   align-items: flex-start;
-  padding-top: 30px;
+  padding-top: 40px; /* <-- Aumentado para dar más espacio */
   justify-content: center;
   font-family: monospace;
   font-weight: 1000;
-  font-size: 12px;                       
+  font-size: 14px; /* <-- Aumentado para mejor legibilidad */
   letter-spacing: 2px;
   color: #fff;
 }
 
-.casino-ruleta-numbers-grid > div:nth-child(1){ background: #0ea52a; }
-.casino-ruleta-numbers-grid > div:nth-child(n+2):nth-child(even){ background: #d3122b; }
-.casino-ruleta-numbers-grid > div:nth-child(n+2):nth-child(odd){  background: #1a1a1a; }
+/* Color Verde (Cero) */
+.casino-ruleta-numbers-grid div[data-number="0"] {
+    background-color: #0ea52a; /* Verde */
+    color: #fff; /* Asegura que el texto '0' sea blanco y visible */
+}
+
+/* Colores Rojos */
+.casino-ruleta-numbers-grid div[data-number="1"],
+.casino-ruleta-numbers-grid div[data-number="3"],
+.casino-ruleta-numbers-grid div[data-number="5"],
+.casino-ruleta-numbers-grid div[data-number="7"],
+.casino-ruleta-numbers-grid div[data-number="9"],
+.casino-ruleta-numbers-grid div[data-number="12"],
+.casino-ruleta-numbers-grid div[data-number="14"],
+.casino-ruleta-numbers-grid div[data-number="16"],
+.casino-ruleta-numbers-grid div[data-number="18"],
+.casino-ruleta-numbers-grid div[data-number="19"],
+.casino-ruleta-numbers-grid div[data-number="21"],
+.casino-ruleta-numbers-grid div[data-number="23"],
+.casino-ruleta-numbers-grid div[data-number="25"],
+.casino-ruleta-numbers-grid div[data-number="27"],
+.casino-ruleta-numbers-grid div[data-number="30"],
+.casino-ruleta-numbers-grid div[data-number="32"],
+.casino-ruleta-numbers-grid div[data-number="34"],
+.casino-ruleta-numbers-grid div[data-number="36"] {
+    background-color: #d3122b; /* Rojo */
+}
+
+/* Colores Negros */
+.casino-ruleta-numbers-grid div[data-number="2"],
+.casino-ruleta-numbers-grid div[data-number="4"],
+.casino-ruleta-numbers-grid div[data-number="6"],
+.casino-ruleta-numbers-grid div[data-number="8"],
+.casino-ruleta-numbers-grid div[data-number="10"],
+.casino-ruleta-numbers-grid div[data-number="11"],
+.casino-ruleta-numbers-grid div[data-number="13"],
+.casino-ruleta-numbers-grid div[data-number="15"],
+.casino-ruleta-numbers-grid div[data-number="17"],
+.casino-ruleta-numbers-grid div[data-number="20"],
+.casino-ruleta-numbers-grid div[data-number="22"],
+.casino-ruleta-numbers-grid div[data-number="24"],
+.casino-ruleta-numbers-grid div[data-number="26"],
+.casino-ruleta-numbers-grid div[data-number="28"],
+.casino-ruleta-numbers-grid div[data-number="29"],
+.casino-ruleta-numbers-grid div[data-number="31"],
+.casino-ruleta-numbers-grid div[data-number="33"],
+.casino-ruleta-numbers-grid div[data-number="35"] {
+    background-color: #1a1a1a; /* Negro */
+}
 
 .casino-ruleta-numbers-grid .cero{
-  background-color: green;
   transform: translate(-50%, -100%) rotate(calc(360deg/37 * 0));}
 .casino-ruleta-numbers-grid .treintaydos    { 
   transform: translate(-50%, -100%) rotate(calc(360deg/37 * 1)); }
@@ -1027,7 +1013,7 @@
   transform: translate(-50%, -100%) rotate(calc(360deg/37 * 12)); }
 .casino-ruleta-numbers-grid .treintayseis   { 
   transform: translate(-50%, -100%) rotate(calc(360deg/37 * 13)); }
-.casino-ruleta-numbers-grid .one            { 
+.casino-ruleta-numbers-grid .once          { 
   transform: translate(-50%, -100%) rotate(calc(360deg/37 * 14)); } 
 .casino-ruleta-numbers-grid .treinta        { 
   transform: translate(-50%, -100%) rotate(calc(360deg/37 * 15)); }
@@ -1074,53 +1060,228 @@
 .casino-ruleta-numbers-grid .veintiseis     { 
   transform: translate(-50%, -100%) rotate(calc(360deg/37 * 36)); }
 
-#girar {
-  height: 60px;
-  width: 150px;
-  background: #B71C1C;
-  color: #E0E0E0;
-  border-radius: 8px;
-  cursor: pointer;
-  border: none;
-  margin-top: 30px;
-  font-size: 30px;
-  font-weight: 1000px;
-}
 
-  .stopper {
-  height: 20px;
-  width: 30px;
-  background: #C9A227;
-  position: absolute;
-  margin-top: -440px;
-  left: calc(50% - 15px);
-  clip-path: polygon(100% 0, 50% 100%, 0 0);
-  box-shadow: 0 0 15px rgba(201,162,39,0.6);
+
+/* === MARCADOR DE LA RULETA (FLECHA DORADA) === */
+.stopper {
+  position: absolute; 
+  /* ANTES: top: 75px; */
+  top: 100px; /* Cambia a un valor mayor, por ejemplo 90px. Prueba con 85px, 95px si es necesario. */
+  left: 50%;
+  transform: translateX(-50%);
   
+  width: 0;
+  height: 0;
+  border-left: 15px solid transparent;
+  border-right: 15px solid transparent;
+  border-top: 20px solid #FBC02D; 
+  
+  z-index: 10; 
+  filter: drop-shadow(0 2px 2px rgba(0,0,0,0.5));
+}
+.winner-ruleta {
+  /* Fondo más brillante o con un color de resaltado */
+  background-color: #4CAF50 !important; /* Un verde vibrante para indicar que ganó */
+  color: #FFF !important; /* Texto blanco para mayor contraste */
+  font-weight: bold;
+  box-shadow: 0 0 15px rgba(76, 175, 80, 0.8), /* Sombra luminosa verde */
+              0 0 25px rgba(76, 175, 80, 0.5); /* Sombra más amplia */
+  border: 2px solid #FFF !important; /* Borde blanco para destacarlo */
+  transform: scale(1.1); /* Ligeramente más grande */
+  transition: all 0.2s ease-out; /* Transición suave */
 }
 
-.casino-ruleta-numbers-grid .winner-ruleta{
-  outline: 3px solid #ffd700;
-  filter: brightness(1.15);
-  z-index: 2;
-}
-
-.bubble-ruleta{
+/* Burbuja de resultado */
+.bubble-ruleta {
   position: absolute;
-  transform: translate(-50%, -120%);
-  padding: 8px 12px;
-  background: rgba(0,0,0,.85);
+  top: -40px;
   color: #fff;
-  font: 700 14px/1 system-ui, -apple-system, Segoe UI, Roboto, Arial;
+  background: rgba(0, 0, 0, 0.8);
+  padding: 8px 15px;
   border-radius: 10px;
-  box-shadow: 0 6px 18px rgba(0,0,0,.35);
+  border: 2px solid #ffd700;
   opacity: 0;
-  transition: opacity .2s ease, transform .2s ease;
-  pointer-events: none;
+  transition: opacity 0.4s ease;
 }
-.bubble-ruleta.show{
+.bubble-ruleta.show {
   opacity: 1;
-  transform: translate(-50%, -140%);
+}
+
+/* ================= PANEL DE APUESTA ================= */
+.tablero-apuestas {
+  margin-top: 60px;
+  background: linear-gradient(180deg, #111 0%, #0a0a0a 100%);
+  border: 2px solid #ffd700;
+  border-radius: 15px;
+  box-shadow: 0 0 25px rgba(255, 215, 0, 0.25);
+  padding: 35px 40px;
+  width: fit-content;
+  min-width: 700px;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.tablero-apuestas:hover {
+  box-shadow: 0 0 35px rgba(255, 215, 0, 0.35);
+}
+
+/* Título */
+.titulo-tablero {
+  color: #ffd700;
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 20px;
+  text-shadow: 0 0 10px #d4af37;
+  border-bottom: 1px solid rgba(255, 215, 0, 0.2);
+  padding-bottom: 10px;
+}
+
+/* Cuadrícula principal */
+.tablero-completo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 7px;
+}
+
+/* Fila de números */
+.fila {
+  display: flex;
+  gap: 5px;
+}
+
+/* Celdas de número */
+.celda {
+  width: 50px;
+  height: 45px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 5px;
+  border: 1px solid #444;
+  font-size: 0.95rem;
+  font-weight: bold;
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
+  text-shadow: 0 1px 2px #000;
+}
+
+.celda.roja { background-color: #b71c1c; }
+.celda.negra { background-color: #1c1c1c; }
+.celda.verde { background-color: #107d24; }
+
+.celda.seccion[data-seccion] {
+  background: #111;
+  color: #ffd700;
+  border: 1px solid #666;
+  font-size: 0.85rem;
+}
+
+.celda.seccion[data-color="rojo"] {
+    background-color: #b71c1c; /* Tu color rojo */
+    border-color: #b71c1c;
+}
+
+.celda.seccion[data-color="negro"] {
+    background-color: #1c1c1c; /* Tu color negro */
+    border-color: #444; /* Un borde un poco más claro para que se note */
+}
+
+.celda:hover {
+  transform: scale(1.08);
+  border-color: #ffd700;
+  box-shadow: 0 0 10px rgba(255, 215, 0, 0.4);
+}
+
+.celda.selected {
+  border: 2px solid #00ff9d;
+  box-shadow: 0 0 10px #00ff9d;
+}
+
+/* === MONTO DE APUESTA + BOTÓN === */
+.monto-apuesta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  margin-top: 25px;
+}
+
+.monto-apuesta label {
+  color: #ffd700;
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+.monto-apuesta input {
+  width: 140px;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ffd700;
+  background: #111;
+  color: #fff;
+  font-size: 1rem;
+  text-align: right;
+  outline: none;
+  box-shadow: inset 0 0 6px rgba(255, 215, 0, 0.2);
+}
+
+/* Botón Apostar mejorado */
+.monto-apuesta button {
+  background: linear-gradient(145deg, #b71c1c, #8a1212);
+  color: #fff;
+  font-weight: bold;
+  border: 2px solid #ff3333;
+  padding: 12px 30px;
+  border-radius: 10px;
+  font-size: 1.1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 15px rgba(183, 28, 28, 0.4);
+}
+
+.monto-apuesta button:hover {
+  background: linear-gradient(145deg, #d32f2f, #a51414);
+  transform: scale(1.1);
+  box-shadow: 0 0 25px rgba(211, 47, 47, 0.6);
+}
+
+.lista-ganadores {
+  display: flex;
+  flex-direction: row; /* <-- La clave para ponerlos "hacia el lado" */
+  justify-content: flex-start;
+  align-items: center;
+  gap: 8px; /* Espacio entre los círculos */
+  min-height: 40px; /* Asegura que el contenedor tenga altura */
+}
+
+.numero-ganador {
+  width: 32px;  /* Ancho del círculo */
+  height: 32px; /* Alto del círculo */
+  border-radius: 50%; /* <-- Esto lo hace un círculo */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  color: #ffffff;
+  font-size: 0.9rem;
+  flex-shrink: 0; /* Evita que los círculos se achaten */
+  border: 1px solid rgba(255,255,255,0.2); /* Un borde sutil */
+}
+
+/* Clases de color que usaremos desde el JS */
+.numero-ganador.rojo {
+  background-color: #b71c1c;
+}
+.numero-ganador.negro {
+  background-color: #1c1c1c;
+}
+.numero-ganador.verde {
+  background-color: #0ea52a;
 }
 
 
@@ -1148,7 +1309,7 @@
                       <img src="/images/user-icon.svg"  class="avatar-img">
                       <span class="status-dot" title="Conectado"></span>
                 </div>
-              <span class="saldo">{{formatCLP (defaultZero user.saldo)}}</span>
+              <span class="saldo" id="navbar-saldo">{{formatCLP (defaultZero user.saldo)}}</span>
       </div>
                 </a>
 

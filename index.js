@@ -238,14 +238,14 @@ app.post('/apostar', async (req, res) => {
     const numerosRojos = [1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36];
     const numerosNegros = [2, 4, 6, 8, 10, 11, 13, 15, 17, 20, 22, 24, 26, 28, 29, 31, 33, 35];
 
-    let resultado = "perdida"; // Por defecto, se pierde
-    let ganancia = 0; // Por defecto, no hay ganancia
+    let resultado = "perdida"; 
+    let ganancia = 0; 
 
     // 3. Comprobar el resultado según el tipo de apuesta
     if (tipo === 'numero') {
       if (parseInt(valor, 10) === numeroGanador) {
         resultado = "ganada";
-        ganancia = monto * 36; // Paga 35 a 1 (monto apostado + 35 * monto)
+        ganancia = monto * 36; 
       }
     } 
     else if (tipo === 'color_o_seccion') {
@@ -263,14 +263,12 @@ app.post('/apostar', async (req, res) => {
           }
           break;
         case 'par':
-          // El 0 no es par ni impar en la ruleta
           if (numeroGanador !== 0 && numeroGanador % 2 === 0) {
             resultado = "ganada";
             ganancia = monto * 2; // Paga 1 a 1
           }
           break;
         case 'impar':
-          // El 0 no es impar
           if (numeroGanador !== 0 && numeroGanador % 2 !== 0) {
             resultado = "ganada";
             ganancia = monto * 2; // Paga 1 a 1
@@ -279,7 +277,7 @@ app.post('/apostar', async (req, res) => {
       }
     }
 
-    // 4. Sumar la ganancia (si la hay) al saldo
+    // 4. Sumar la ganancia al saldo
     usuario.saldo += ganancia;
 
     // Guardar apuesta e historial

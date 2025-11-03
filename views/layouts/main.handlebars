@@ -835,8 +835,8 @@
   justify-content: center;      
   gap: 40px;            
   width: 100%;
-  max-width: 1400px; /* <-- AÑADIDO: Límite de ancho */
-  margin: 40px auto 0; /* <-- CAMBIADO: Centra el contenedor */
+  max-width: 1400px; 
+  margin: 40px auto 0; 
 }
 .area-ruleta {
   flex: 2;
@@ -845,12 +845,11 @@
   border-radius: 0.75rem;
   padding: 2rem;
   
-  /* --- 👇 LÍNEAS IMPORTANTES A AÑADIR --- */
-  position: relative;     /* Permite posicionar el indicador DENTRO de este bloque */
+  position: relative;    
   display: flex;
   flex-direction: column;
-  align-items: center;    /* Centra la ruleta horizontalmente */
-  gap: 15px;              /* Un pequeño espacio entre el título y la ruleta */
+  align-items: center;    
+  gap: 15px;              
 }
 
 .titulo-ruleta {
@@ -904,20 +903,20 @@
     }
 }
 
-/* CONTENEDOR (igual al tuyo) */
+/* CONTENEDOR DE NUMEROS*/
 .casino-ruleta-numbers-grid {
-  height: 450px; /* <-- CAMBIADO */
-  width: 450px;  /* <-- CAMBIADO */
+  height: 450px; 
+  width: 450px;  
   background: #0A0A0A;
   position: relative;
   border-radius: 50%;
-  left: calc(50% - 225px); /* <-- CAMBIADO (225 es la mitad de 450) */
+  left: calc(50% - 225px); 
   overflow: hidden;
   transition: 0.5s all;
 }
 .casino-ruleta-numbers-grid div {
   height: 50%;            
-  width: calc(450px * 0.095); /* <-- CAMBIADO (usa la nueva base de 450px) */
+  width: calc(450px * 0.095);
   clip-path: polygon(100% 0, 50% 100%, 0 0);
   position: absolute;
   left: 50%;
@@ -926,19 +925,19 @@
   transform: translate(-50%, -100%) rotate(0deg);
   display: flex;
   align-items: flex-start;
-  padding-top: 40px; /* <-- Aumentado para dar más espacio */
+  padding-top: 40px;
   justify-content: center;
   font-family: monospace;
   font-weight: 1000;
-  font-size: 14px; /* <-- Aumentado para mejor legibilidad */
+  font-size: 14px; 
   letter-spacing: 2px;
   color: #fff;
 }
 
 /* Color Verde (Cero) */
 .casino-ruleta-numbers-grid div[data-number="0"] {
-    background-color: #0ea52a; /* Verde */
-    color: #fff; /* Asegura que el texto '0' sea blanco y visible */
+    background-color: #0ea52a; 
+    color: #fff;
 }
 
 /* Colores Rojos */
@@ -1065,8 +1064,7 @@
 /* === MARCADOR DE LA RULETA (FLECHA DORADA) === */
 .stopper {
   position: absolute; 
-  /* ANTES: top: 75px; */
-  top: 100px; /* Cambia a un valor mayor, por ejemplo 90px. Prueba con 85px, 95px si es necesario. */
+  top: 100px;
   left: 50%;
   transform: translateX(-50%);
   
@@ -1080,15 +1078,14 @@
   filter: drop-shadow(0 2px 2px rgba(0,0,0,0.5));
 }
 .winner-ruleta {
-  /* Fondo más brillante o con un color de resaltado */
-  background-color: #4CAF50 !important; /* Un verde vibrante para indicar que ganó */
-  color: #FFF !important; /* Texto blanco para mayor contraste */
+  background-color: #4CAF50 !important; 
+  color: #FFF !important; 
   font-weight: bold;
-  box-shadow: 0 0 15px rgba(76, 175, 80, 0.8), /* Sombra luminosa verde */
-              0 0 25px rgba(76, 175, 80, 0.5); /* Sombra más amplia */
-  border: 2px solid #FFF !important; /* Borde blanco para destacarlo */
-  transform: scale(1.1); /* Ligeramente más grande */
-  transition: all 0.2s ease-out; /* Transición suave */
+  box-shadow: 0 0 15px rgba(76, 175, 80, 0.8), 
+              0 0 25px rgba(76, 175, 80, 0.5); 
+  border: 2px solid #FFF !important; 
+  transform: scale(1.1); 
+  transition: all 0.2s ease-out; 
 }
 
 /* Burbuja de resultado */
@@ -1180,13 +1177,13 @@
 }
 
 .celda.seccion[data-color="rojo"] {
-    background-color: #b71c1c; /* Tu color rojo */
+    background-color: #b71c1c; 
     border-color: #b71c1c;
 }
 
 .celda.seccion[data-color="negro"] {
-    background-color: #1c1c1c; /* Tu color negro */
-    border-color: #444; /* Un borde un poco más claro para que se note */
+    background-color: #1c1c1c; 
+    border-color: #444; 
 }
 
 .celda:hover {
@@ -1252,28 +1249,27 @@
 
 .lista-ganadores {
   display: flex;
-  flex-direction: row; /* <-- La clave para ponerlos "hacia el lado" */
+  flex-direction: row; 
   justify-content: flex-start;
   align-items: center;
-  gap: 8px; /* Espacio entre los círculos */
-  min-height: 40px; /* Asegura que el contenedor tenga altura */
+  gap: 8px; 
+  min-height: 40px; 
 }
 
 .numero-ganador {
-  width: 32px;  /* Ancho del círculo */
-  height: 32px; /* Alto del círculo */
-  border-radius: 50%; /* <-- Esto lo hace un círculo */
+  width: 32px;  
+  height: 32px; 
+  border-radius: 50%; 
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: bold;
   color: #ffffff;
   font-size: 0.9rem;
-  flex-shrink: 0; /* Evita que los círculos se achaten */
-  border: 1px solid rgba(255,255,255,0.2); /* Un borde sutil */
+  flex-shrink: 0; 
+  border: 1px solid rgba(255,255,255,0.2);
 }
 
-/* Clases de color que usaremos desde el JS */
 .numero-ganador.rojo {
   background-color: #b71c1c;
 }

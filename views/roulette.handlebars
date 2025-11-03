@@ -85,7 +85,7 @@
     </aside>
   </div>
 
-  <!-- TABLERO DE APUESTAS ABAJO -->
+  <!-- TABLERO DE APUESTAS  -->
   <div class="tablero-apuestas">
     <h3 class="titulo-tablero">Realiza tu Apuesta</h3>
 
@@ -185,7 +185,7 @@ document.addEventListener("DOMContentLoaded", () => {
         seleccionadas = seleccionadas.filter(v => v !== valor);
         celda.classList.remove("selected");
       } else {
-        seleccionadas = [valor]; // solo 1 selección a la vez (más controlado)
+        seleccionadas = [valor]; 
         document.querySelectorAll(".celda").forEach(c => c.classList.remove("selected"));
         celda.classList.add("selected");
       }
@@ -208,7 +208,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     const valor = seleccionadas[0];
-    const tipo = isNaN(valor) ? "color_o_seccion" : "numero"; // distinguir tipos
+    const tipo = isNaN(valor) ? "color_o_seccion" : "numero"; 
 
     try {
       estado.textContent = "Girando la ruleta...";
@@ -223,10 +223,9 @@ document.addEventListener("DOMContentLoaded", () => {
       const data = await res.json();
 
       if (!res.ok) {
-        // Usa el mensaje de error del servidor (data.error)
-        // o usa un mensaje genérico si no existe.
+      
         const mensajeError = data.error || "Error al conectar con el servidor.";
-        estado.textContent = `⚠️ ${mensajeError}`; // <-- Muestra "Saldo insuficiente"
+        estado.textContent = `⚠️ ${mensajeError}`;
         girando = false;
         return;
       }
@@ -244,16 +243,16 @@ document.addEventListener("DOMContentLoaded", () => {
         ruleta.style.transition = 'none';
         const anguloReal = anguloFinal % 360;
         ruleta.style.transform = `rotate(${anguloReal}deg)`;
-       ruleta.querySelectorAll("div").forEach(d => d.classList.remove("winner-ruleta")); // Quita el resaltado anterior
+       ruleta.querySelectorAll("div").forEach(d => d.classList.remove("winner-ruleta"));
 
-// Encuentra el div del número ganador usando el atributo data-number
+
 const divGanador = ruleta.querySelector(`div[data-number="${numeroGanador}"]`);
 
 if (divGanador) {
     divGanador.classList.add("winner-ruleta");
 }
 
-// Usamos el mismo índice que usamos para la rotación
+
 
 
         saldoDisplay.textContent = "$" + data.nuevoSaldo.toLocaleString("es-CL");
@@ -278,10 +277,9 @@ if (divGanador) {
         historialBody.prepend(row);
 
        const nuevoDiv = document.createElement("div");
-      nuevoDiv.className = "numero-ganador"; // Asigna la clase base
+      nuevoDiv.className = "numero-ganador"; 
       nuevoDiv.textContent = numeroGanador;
 
-      // Añade la clase de color correcta
       if (numeroGanador === 0) {
         nuevoDiv.classList.add("verde");
       } else if (numerosRojos.includes(numeroGanador)) {
@@ -290,13 +288,13 @@ if (divGanador) {
         nuevoDiv.classList.add("negro");
       }
       
-      listaGanadores.prepend(nuevoDiv); // Añade al principio (izquierda)
+      listaGanadores.prepend(nuevoDiv);
       
-      // Elimina el último si hay más de 5
+  
       if (listaGanadores.children.length > 5) {
         listaGanadores.removeChild(listaGanadores.lastChild);
       }
-      // --- (Fin de la sección modificada) ---
+  
 
     }, 3500);
 

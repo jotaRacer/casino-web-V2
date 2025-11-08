@@ -934,15 +934,15 @@
 }
 
 /* ================= RULETA ================= */
-.ruleta-superior {
-  display: flex;        
-  flex-direction: row;        
-  align-items: flex-start;      
-  justify-content: center;      
-  gap: 40px;            
+.ruleta-layout {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start; /* Alinea las 3 columnas arriba */
+  justify-content: center;
+  gap: 30px; /* Espacio entre columnas */
   width: 100%;
-  max-width: 1400px; 
-  margin: 40px auto 0; 
+  max-width: 1600px; /* Damos más espacio para 3 columnas */
+  margin: 40px auto 0;
 }
 .area-ruleta {
   flex: 2;
@@ -950,7 +950,7 @@
   border: 2px solid #C9A227;
   border-radius: 0.75rem;
   padding: 2rem;
-  
+  min-width: 500px;
   position: relative;    
   display: flex;
   flex-direction: column;
@@ -978,9 +978,8 @@
     border: 2px solid #C9A227;
     border-radius: 0.5rem;
     padding: 1.25rem;
-    margin-top: 30px;
+    /* margin-top: 30px; */ /* <-- Eliminado */
 }
-
 .titulo-info-ruleta {
     font-size: 1.25rem;
     font-weight: bold;
@@ -1016,7 +1015,6 @@
   background: #0A0A0A;
   position: relative;
   border-radius: 50%;
-  left: calc(50% - 225px); 
   overflow: hidden;
   transition: 0.5s all;
 }
@@ -1384,6 +1382,12 @@
 }
 .numero-ganador.verde {
   background-color: #0ea52a;
+}
+
+.numero-ganador.empty {
+  background-color: rgba(0, 0, 0, 0.2);
+  border: 1px solid #555;
+  color: transparent;
 }
 
 

@@ -1,94 +1,54 @@
 <div class="ruleta-layout">
-  <!-- CONTENEDOR SUPERIOR: RULETA + PANEL DERECHO -->
-  <div class="ruleta-superior">
-    <section class="area-ruleta">
-      <h2 class="titulo-ruleta">Ruleta Europea</h2>
 
-      <!-- Ruleta circular -->
-      <div class="casino-ruleta-numbers-grid" id="ruleta">
-        <div class="cero" data-number="0">0</div>
-          <div class="treintaydos" data-number="32">32</div>
-          <div class="quince" data-number="15">15</div>
-          <div class="diecinueve" data-number="19">19</div>
-          <div class="cuatro" data-number="4">4</div>
-          <div class="veintiuno" data-number="21">21</div>
-          <div class="dos" data-number="2">2</div>
-          <div class="veinticinco" data-number="25">25</div>
-          <div class="diecisiete" data-number="17">17</div>
-          <div class="treintaycuatro" data-number="34">34</div>
-          <div class="seis" data-number="6">6</div>
-          <div class="veintisiete" data-number="27" >27</div>
-          <div class="trece" data-number="13">13</div>
-          <div class="treintayseis" data-number="36">36</div>
-          <div class="once" data-number="11">11</div>
-          <div class="treinta" data-number="30">30</div>
-          <div class="ocho" data-number="8">8</div>
-          <div class="veintitres" data-number="23">23</div>
-          <div class="diez" data-number="10">10</div>
-          <div class="cinco" data-number="5">5</div>
-          <div class="veinticuatro" data-number="24">24</div>
-          <div class="dieciseis" data-number="16">16</div>
-          <div class="treintaytres" data-number="33">33</div>
-          <div class="uno" data-number="1">1</div>
-          <div class="veinte" data-number="20">20</div>
-          <div class="catornce" data-number="14">14</div>
-          <div class="treintayuno" data-number="31">31</div>
-          <div class="nueve" data-number="9">9</div>
-          <div class="veintidos" data-number="22">22</div>
-          <div class="deciocho" data-number="18">18</div>
-          <div class="veintinueve" data-number="29">29</div>
-          <div class="siete" data-number="7">7</div>
-          <div class="veintiocho" data-number="28">28</div>
-          <div class="doce" data-number="12">12</div>
-          <div class="treintaycinco" data-number="35">35</div>
-          <div class="tres" data-number="3">3</div>
-          <div class="veintiseis" data-number="26">26</div>
-      </div>
+  <section class="area-ruleta">
+    <h2 class="titulo-ruleta">Ruleta Europea</h2>
 
-      <div class="stopper"></div>
-      <div class="bubble-ruleta"></div>
-    </section>
+    <div class="casino-ruleta-numbers-grid" id="ruleta">
+      <div class="cero" data-number="0">0</div>
+      <div class="treintaydos" data-number="32">32</div>
+      <div class="quince" data-number="15">15</div>
+      <div class="diecinueve" data-number="19">19</div>
+      <div class="cuatro" data-number="4">4</div>
+      <div class="veintiuno" data-number="21">21</div>
+      <div class="dos" data-number="2">2</div>
+      <div class="veinticinco" data-number="25">25</div>
+      <div class="diecisiete" data-number="17">17</div>
+      <div class="treintaycuatro" data-number="34">34</div>
+      <div class="seis" data-number="6">6</div>
+      <div class="veintisiete" data-number="27" >27</div>
+      <div class="trece" data-number="13">13</div>
+      <div class="treintayseis" data-number="36">36</div>
+      <div class="once" data-number="11">11</div>
+      <div class="treinta" data-number="30">30</div>
+      <div class="ocho" data-number="8">8</div>
+      <div class="veintitres" data-number="23">23</div>
+      <div class="diez" data-number="10">10</div>
+      <div class="cinco" data-number="5">5</div>
+      <div class="veinticuatro" data-number="24">24</div>
+      <div class="dieciseis" data-number="16">16</div>
+      <div class="treintaytres" data-number="33">33</div>
+      <div class="uno" data-number="1">1</div>
+      <div class="veinte" data-number="20">20</div>
+      <div class="catornce" data-number="14">14</div>
+      <div class="treintayuno" data-number="31">31</div>
+      <div class="nueve" data-number="9">9</div>
+      <div class="veintidos" data-number="22">22</div>
+      <div class="deciocho" data-number="18">18</div>
+      <div class="veintinueve" data-number="29">29</div>
+      <div class="siete" data-number="7">7</div>
+      <div class="veintiocho" data-number="28">28</div>
+      <div class="doce" data-number="12">12</div>
+      <div class="treintaycinco" data-number="35">35</div>
+      <div class="tres" data-number="3">3</div>
+      <div class="veintiseis" data-number="26">26</div>
+    </div>
 
-    <!-- PANEL DERECHO -->
-    <aside class="sidebar">
-      <div class="ruleta-info-card">
-        <h3 class="titulo-info-ruleta">Estado del Juego</h3>
-        <div id="estado-ruleta" class="status-ruleta">Esperando apuesta...</div>
-      </div>
+    <div class="stopper"></div>
+    <div class="bubble-ruleta"></div>
+  </section>
 
-      <div class="ruleta-info-card">
-        <h3 class="titulo-info-ruleta">Saldo Disponible</h3>
-        <div class="balance-ruleta" id="saldo-display">
-          ${{formatCLP (defaultZero saldo)}}
-        </div>
-      </div>
-
-      <div class="ruleta-info-card">
-        <h3 class="titulo-info-ruleta">Últimos números ganadores</h3>
-        <div id="lista-ganadores" class="lista-ganadores"></div>
-      </div>
-
-      <div class="ruleta-info-card">
-        <h3 class="titulo-info-ruleta">Historial de Apuestas</h3>
-        <table class="apuestas-table">
-          <thead>
-            <tr>
-              <th>Tipo</th>
-              <th>Valor</th>
-              <th>Monto</th>
-              <th>Resultado</th>
-            </tr>
-          </thead>
-          <tbody id="historial-body"></tbody>
-        </table>
-      </div>
-    </aside>
-  </div>
-
-  <!-- TABLERO DE APUESTAS  -->
   <div class="tablero-apuestas">
     <h3 class="titulo-tablero">Realiza tu Apuesta</h3>
-
     <div class="tablero-completo">
       <div class="fila fila0">
         <div class="celda verde" data-num="0">0</div>
@@ -137,7 +97,6 @@
           </div>
         </div>
       </div>
-
       <div class="fila fila-opciones">
         <div class="celda seccion" data-seccion="par">EVEN</div>
         <div class="celda roja seccion" data-color="rojo"></div>
@@ -145,17 +104,65 @@
         <div class="celda seccion" data-seccion="impar">ODD</div>
       </div>
     </div>
-
     <div class="monto-apuesta">
       <label for="monto">Monto:</label>
       <input type="number" id="monto" placeholder="$0" min="100">
       <button id="apostar-btn">Apostar</button>
     </div>
   </div>
-</div>
 
-<!--  LÓGICA JS -->
-<script>
+  <aside class="sidebar">
+    <div class="ruleta-info-card">
+      <h3 class="titulo-info-ruleta">Estado del Juego</h3>
+      <div id="estado-ruleta" class="status-ruleta">Esperando apuesta...</div>
+    </div>
+
+    <div class="ruleta-info-card">
+      <h3 class="titulo-info-ruleta">Saldo Disponible</h3>
+      <div class="balance-ruleta" id="saldo-display">
+        ${{formatCLP (defaultZero saldo)}}
+      </div>
+    </div>
+
+    <div class="ruleta-info-card">
+      <h3 class="titulo-info-ruleta">Últimos números ganadores</h3>
+      <div id="lista-ganadores" class="lista-ganadores">
+        {{#each ultimosGanadores}}
+          {{#if this.empty}}
+            <div class="numero-ganador empty"></div>
+          {{else}}
+            <div class="numero-ganador {{this.color}}">{{this.num}}</div>
+          {{/if}}
+        {{/each}}
+      </div>
+    </div>
+
+    <div class="ruleta-info-card">
+      <h3 class="titulo-info-ruleta">Historial de Apuestas</h3>
+      <table class="apuestas-table">
+        <thead>
+          <tr>
+            <th>Tipo</th>
+            <th>Valor</th>
+            <th>Monto</th>
+            <th>Resultado</th>
+          </tr>
+        </thead>
+        <tbody id="historial-body">
+          {{#each historialApuestas}}
+          <tr>
+            <td>{{this.tipo}}</td>
+            <td>{{this.valor}}</td>
+            <td>${{formatCLP this.monto}}</td> 
+            <td style="color: {{this.resultadoColor}};">{{this.resultado}}</td>
+          </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </div>
+  </aside>
+
+</div> <script>
 document.addEventListener("DOMContentLoaded", () => {
   const ruleta = document.getElementById("ruleta");
   const bubble = document.querySelector(".bubble-ruleta");
@@ -177,7 +184,7 @@ document.addEventListener("DOMContentLoaded", () => {
   let girando = false;
   let seleccionadas = [];
 
-  // 🔹 Permitir seleccionar celdas
+  // Permitir seleccionar celdas
   document.querySelectorAll(".celda").forEach(celda => {
     celda.addEventListener("click", () => {
       const valor = celda.dataset.num || celda.dataset.color || celda.dataset.seccion;
@@ -191,8 +198,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
   });
-
-  // 🔹 Al hacer clic en Apostar
+  // Manejar apuesta
   apostarBtn.addEventListener("click", async () => {
     if (girando) return;
 
@@ -210,11 +216,13 @@ document.addEventListener("DOMContentLoaded", () => {
     const valor = seleccionadas[0];
     const tipo = isNaN(valor) ? "color_o_seccion" : "numero"; 
 
+    ruleta.querySelectorAll("div").forEach(d => d.classList.remove("winner-ruleta"));
+
     try {
       estado.textContent = "Girando la ruleta...";
       girando = true;
 
-     const res = await fetch("/apostar", {
+      const res = await fetch("/apostar", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ tipo, valor, monto })
@@ -223,7 +231,6 @@ document.addEventListener("DOMContentLoaded", () => {
       const data = await res.json();
 
       if (!res.ok) {
-      
         const mensajeError = data.error || "Error al conectar con el servidor.";
         estado.textContent = `⚠️ ${mensajeError}`;
         girando = false;
@@ -235,7 +242,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const anguloPorNumero = 360 / 37;
       const anguloFinal = (360 * 5) - (indiceGanador * anguloPorNumero);
 
-     ruleta.style.transition = "transform 3.5s cubic-bezier(0.23, 1, 0.32, 1)";
+      ruleta.style.transition = "transform 3.5s cubic-bezier(0.23, 1, 0.32, 1)";
       ruleta.style.transform = `rotate(${anguloFinal}deg)`;
 
       setTimeout(() => {
@@ -243,17 +250,11 @@ document.addEventListener("DOMContentLoaded", () => {
         ruleta.style.transition = 'none';
         const anguloReal = anguloFinal % 360;
         ruleta.style.transform = `rotate(${anguloReal}deg)`;
-       ruleta.querySelectorAll("div").forEach(d => d.classList.remove("winner-ruleta"));
-
-
-const divGanador = ruleta.querySelector(`div[data-number="${numeroGanador}"]`);
-
-if (divGanador) {
-    divGanador.classList.add("winner-ruleta");
-}
-
-
-
+        
+        const divGanador = ruleta.querySelector(`div[data-number="${numeroGanador}"]`);
+        if (divGanador) {
+          divGanador.classList.add("winner-ruleta");
+        }
 
         saldoDisplay.textContent = "$" + data.nuevoSaldo.toLocaleString("es-CL");
         if (navbarsaldo) navbarsaldo.textContent = data.nuevoSaldo.toLocaleString("es-CL");
@@ -265,38 +266,89 @@ if (divGanador) {
         }
 
         estado.textContent = `Resultado: ${data.resultado.toUpperCase()} (${numeroGanador})`;
+        
+        let tipoMostrado = 'Apuesta';
+        if (tipo === 'numero') {
+          tipoMostrado = 'Número';
+        } else {
+          if (valor === 'rojo' || valor === 'negro') {
+            tipoMostrado = 'Color';
+          } else {
+            tipoMostrado = 'Sección';
+          }
+        }
 
-        const row = document.createElement("tr");
-        row.innerHTML = `
-          <td>${tipo}</td>
-          <td>${valor}</td>
-          <td>$${monto}</td>
-          <td style="color:${data.resultado === "ganada" ? "#4caf50" : "#f44336"};">
-            ${data.resultado.charAt(0).toUpperCase() + data.resultado.slice(1)}
-          </td>`;
-        historialBody.prepend(row);
+        // --- 1. ACTUALIZA HISTORIAL DE APUESTAS ---
+        const maxHistorial = 5;
 
-       const nuevoDiv = document.createElement("div");
-      nuevoDiv.className = "numero-ganador"; 
-      nuevoDiv.textContent = numeroGanador;
+        let historial = Array.from(historialBody.querySelectorAll("tr")).map(tr => ({
+          tipo: tr.children[0]?.textContent || "",
+          valor: tr.children[1]?.textContent || "",
+          monto: tr.children[2]?.textContent || "",
+          resultado: tr.children[3]?.textContent || "",
+          color: tr.children[3]?.style.color || ""
+        }));
 
-      if (numeroGanador === 0) {
-        nuevoDiv.classList.add("verde");
-      } else if (numerosRojos.includes(numeroGanador)) {
-        nuevoDiv.classList.add("rojo");
-      } else {
-        nuevoDiv.classList.add("negro");
-      }
+        // Inserta la nueva apuesta al inicio
+        historial.unshift({
+          tipo: tipoMostrado,
+          valor,
+          monto: `$${monto}`,
+          resultado: data.resultado.charAt(0).toUpperCase() + data.resultado.slice(1),
+          color: data.resultado === "ganada" ? "#4caf50" : "#f44336"
+        });
+
       
-      listaGanadores.prepend(nuevoDiv);
-      
-  
-      if (listaGanadores.children.length > 5) {
-        listaGanadores.removeChild(listaGanadores.lastChild);
-      }
-  
+        historial = historial.slice(0, maxHistorial);
 
-    }, 3500);
+        historialBody.innerHTML = "";
+        historial.forEach(ap => {
+          const row = document.createElement("tr");
+          row.innerHTML = `
+            <td>${ap.tipo}</td>
+            <td>${ap.valor}</td>
+            <td>${ap.monto}</td>
+            <td style="color:${ap.color};">${ap.resultado}</td>
+          `;
+          historialBody.appendChild(row);
+        });
+
+
+        // --- ACTUALIZA ÚLTIMOS NÚMEROS ---
+        const nuevoDiv = document.createElement("div");
+        nuevoDiv.className = "numero-ganador";
+        nuevoDiv.textContent = numeroGanador;
+
+        // Color del número
+        if (numeroGanador === 0) nuevoDiv.classList.add("verde");
+        else if (numerosRojos.includes(numeroGanador)) nuevoDiv.classList.add("rojo");
+        else nuevoDiv.classList.add("negro");
+
+        //  Mantener SOLO los últimos 5 visibles
+        const maxGanadores = 5;
+        let ganadores = Array.from(listaGanadores.querySelectorAll(".numero-ganador"))
+          .map(div => div.textContent)
+          .filter(n => n !== "");
+
+        ganadores.unshift(String(numeroGanador));
+
+        // Cortar a los 5 últimos
+        ganadores = ganadores.slice(0, maxGanadores);
+
+
+        listaGanadores.innerHTML = "";
+        ganadores.forEach(num => {
+          const div = document.createElement("div");
+          div.className = "numero-ganador";
+          const n = Number(num);
+          div.textContent = num;
+          if (n === 0) div.classList.add("verde");
+          else if (numerosRojos.includes(n)) div.classList.add("rojo");
+          else div.classList.add("negro");
+          listaGanadores.appendChild(div);
+        });
+
+      }, 3500); // Fin del setTimeout
 
     } catch (err) {
       console.error(err);

@@ -200,18 +200,58 @@ app.get('/ruleta', async (req, res) => {
       return res.redirect('/login');
     }
 
+    // --- LÓGICA DE PREPARACIÓN DE HISTORIAL ---
+    const numerosRojos = [1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36];
+
+    // Procesa los números ganadores
+    const ultimosGanadoresConColor = (usuario.ultimosGanadores?.slice(-5).reverse() || []).map(num => {
+      let color = 'negro';
+      if (num === 0) color = 'verde';
+      if (numerosRojos.includes(num)) color = 'rojo';
+      return { num, color };
+    });
+
+    
+    const slotsVacios = 5 - ultimosGanadoresConColor.length;
+    for (let i = 0; i < slotsVacios; i++) {
+      ultimosGanadoresConColor.push({ empty: true });
+    }
+ 
+
+    // Procesa el historial de apuestas
+    const historialFormateado = (usuario.apuestas?.slice(-5).reverse() || []).map(apuesta => {
+      let tipoMostrado = 'Apuesta';
+      if (apuesta.tipo === 'numero') {
+        tipoMostrado = 'Número';
+      } else if (apuesta.tipo === 'color_o_seccion') {
+        if (apuesta.valor === 'rojo' || apuesta.valor === 'negro') {
+          tipoMostrado = 'Color';
+        } else if (apuesta.valor === 'par' || apuesta.valor === 'impar') {
+          tipoMostrado = 'Sección';
+        }
+      }
+
+      return {
+        tipo: tipoMostrado,
+        valor: apuesta.valor,
+        monto: apuesta.monto,
+        resultado: apuesta.resultado.charAt(0).toUpperCase() + apuesta.resultado.slice(1),
+        resultadoColor: apuesta.resultado === 'ganada' ? '#4caf50' : '#f44336'
+      };
+    });
+
     res.render('roulette', { 
       title: 'Ruleta', 
       saldo: usuario.saldo ?? 0,
-      ultimosGanadores: usuario.ultimosGanadores?.slice(-5).reverse() || [],
-      historialApuestas: usuario.apuestas?.slice(-5).reverse() || []
+      ultimosGanadores: ultimosGanadoresConColor,
+      historialApuestas: historialFormateado
     });
+
   } catch (err) {
     console.error('Error al cargar la ruleta:', err);
     res.send('Error al cargar la ruleta');
   }
 });
-
 
 // --- APOSTAR ---
 app.post('/apostar', async (req, res) => {
@@ -229,19 +269,18 @@ app.post('/apostar', async (req, res) => {
     // Resta el monto del saldo ANTES de calcular el resultado
     usuario.saldo -= monto;
 
-    // --- LÓGICA DE RULETA MEJORADA ---
 
-    // 1. Simular número ganador (0-36)
+   //Simular número ganador (0-36)
     const numeroGanador = Math.floor(Math.random() * 37);
     
-    // 2. Definir arrays de colores
+    //Definir arrays de colores
     const numerosRojos = [1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36];
     const numerosNegros = [2, 4, 6, 8, 10, 11, 13, 15, 17, 20, 22, 24, 26, 28, 29, 31, 33, 35];
 
     let resultado = "perdida"; 
     let ganancia = 0; 
 
-    // 3. Comprobar el resultado según el tipo de apuesta
+    // Comprobar el resultado según el tipo de apuesta
     if (tipo === 'numero') {
       if (parseInt(valor, 10) === numeroGanador) {
         resultado = "ganada";
@@ -277,10 +316,10 @@ app.post('/apostar', async (req, res) => {
       }
     }
 
-    // 4. Sumar la ganancia al saldo
+    // Sumar la ganancia al saldo
     usuario.saldo += ganancia;
 
-    // Guardar apuesta e historial
+    // Guardar apuesta en historial
     usuario.apuestas.push({
       tipo,
       valor,

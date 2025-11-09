@@ -1,24 +1,33 @@
 <div class="container2">
-    <h1 class="titulo-transaccion">Depósito</h1>
-    <div class="saldo">Saldo Actual: $<span id="balance">0.00</span></div>
+  <h1 class="titulo-transaccion">Depósito</h1>
 
-    <div class="card-transaccion">
-      <form id="transactionForm">
-        <label for="amount">Ingrese la cantidad de dinero a depositar:</label>
-        <input type="number" id="amount" name="amount" placeholder="$0.00" required />
-        <button type="submit" class="submit-btn2">Confirme monto y comience a jugar</button>
-      </form>
-    </div>
-
-    <div class="card-transaccion">
-      <form id="withdrawForm">
-        <label for="amount2">Ingrese la cantidad de dinero que desea retirar:</label>
-        <input type="number" id="amount2" name="amount2" placeholder="$0.00" required />
-        <button type="submit" class="submit-btn2">Confirme monto y retire su dinero</button>
-      </form>
-    </div>
+  <div class="saldo">
+    Saldo Actual: $<span id="balance">{{formatCLP saldo}}</span>
   </div>
-  <script>
+
+  <div class="card-transaccion">
+    <form id="transactionForm">
+      <label for="amount">Ingrese la cantidad de dinero a depositar:</label>
+      <input type="number" id="amount" name="amount" placeholder="$0.00" required min="1" step="1" />
+      <button type="submit" class="submit-btn2">Confirme monto y comience a jugar</button>
+    </form>
+  </div>
+
+  <div class="card-transaccion">
+    <form id="withdrawForm">
+      <label for="amount2">Ingrese la cantidad de dinero que desea retirar:</label>
+      <input type="number" id="amount2" name="amount2" placeholder="$0.00" required min="1" step="1" />
+      <button type="submit" class="submit-btn2">Confirme monto y retire su dinero</button>
+    </form>
+  </div>
+</div>
+
+<script>
+  const fmtCLP = v => new Intl.NumberFormat('es-CL', {
+    style: 'decimal',
+    maximumFractionDigits: 0
+  }).format(Number(v ?? 0));
+
   // --- DEPÓSITO ---
   document.getElementById('transactionForm').addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -34,11 +43,11 @@
 
     const data = await res.json();
     if (data.nuevoSaldo !== undefined) {
-      document.getElementById('balance').textContent = data.nuevoSaldo;
+      document.getElementById('balance').textContent = fmtCLP(data.nuevoSaldo);
       alert("Depósito exitoso 💰");
       document.getElementById('amount').value = '';
     } else {
-      alert("Error al depositar");
+      alert(data.error || "Error al depositar");
     }
   });
 
@@ -57,11 +66,11 @@
 
     const data = await res.json();
     if (data.nuevoSaldo !== undefined) {
-      document.getElementById('balance').textContent = data.nuevoSaldo;
+      document.getElementById('balance').textContent = fmtCLP(data.nuevoSaldo);
       alert("Retiro exitoso 🏦");
       document.getElementById('amount2').value = '';
     } else {
-      alert("Error al retirar");
+      alert(data.error || "Error al retirar");
     }
   });
 </script>

@@ -143,7 +143,9 @@ app.get('/perfil', async (req, res) => {
 app.get('/deposito', (req, res) => {
   const userEmail = req.cookies.userEmail;
   if (!userEmail) return res.redirect('/login');
-  res.render('deposito', { title: 'Depositar' });
+
+  const saldo = res.locals.user?.saldo ?? 0;
+  res.render('deposito', { title: 'Depositar', saldo });
 });
 
 app.post('/depositar', async (req, res) => {

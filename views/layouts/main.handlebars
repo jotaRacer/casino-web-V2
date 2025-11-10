@@ -862,6 +862,29 @@
   .grid { grid-template-columns: 1fr; }
 }
 
+/* Hacer que el main dentro de grid use CSS Grid para igualar alturas de cards */
+.wrap > .grid > main {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: repeat(6, 1fr) auto;
+  gap: 20px;
+  align-items: stretch;
+}
+
+/* Las cards ocupan las primeras 6 filas del grid con altura uniforme */
+.wrap > .grid > main > section.card {
+  grid-column: 1;
+}
+
+/* Asegurar que el botón "Volver arriba" no afecte la altura de las cards */
+.wrap > .grid > main > .back-top {
+  grid-column: 1;
+  grid-row: 7;
+  margin-top: 10px;
+  align-self: start;
+  height: auto;
+}
+
 .toc {
   background: #121212;
   border: 1px solid rgba(255,255,255,0.06);
@@ -888,6 +911,85 @@
   border-left-color: #C9A227;
   background: rgba(255,255,255,0.03);
 }
+/* Cards específicas para la página de Reglas - SIN hover problemático */
+.wrap > .grid > main > section.card {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  padding: 20px;
+  text-align: left;
+  margin-bottom: 0;
+  /* Altura uniforme para todas las cards */
+  min-height: 220px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  /* SIN TRANSICIONES NI HOVER PARA EVITAR CRASHES */
+  /* SIN will-change */
+  /* SIN transform */
+}
+
+/* Sobrescribir el hover genérico de .card para las cards de reglas */
+.wrap > .grid > main > section.card:hover {
+  transform: none;
+  box-shadow: 0 4px 12px rgba(201, 162, 39, 0.1);
+  border-color: rgba(201, 162, 39, 0.3);
+}
+
+.wrap > .grid > main > section.card h2 {
+  color: #E0E0E0;
+  font-size: 24px;
+  border-left: 4px solid #C9A227;  
+  padding-left: 12px;
+  margin-bottom: 12px;
+  margin-top: 0;
+  border-bottom: none !important;
+  padding-bottom: 0 !important;
+  text-align: left;
+  flex-shrink: 0;
+}
+
+@media (max-width: 768px) {
+  .wrap > .grid > main > section.card h2 {
+    font-size: 20px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .wrap > .grid > main > section.card h2 {
+    font-size: 28px;
+  }
+}
+
+.wrap > .grid > main > section.card p {
+  color: #B0BEC5;
+  line-height: 1.6;
+  text-align: left;
+  margin: 0 0 12px 0;
+}
+
+.wrap > .grid > main > section.card ul {
+  margin: 0 0 0 18px;
+  padding: 0;
+  text-align: left;
+}
+
+.wrap > .grid > main > section.card li {
+  margin: 6px 0;
+}
+
+/* Asegurar que el contenido interno se distribuya bien */
+.wrap > .grid > main > section.card > *:last-child {
+  margin-bottom: 0;
+}
+
+/* Estilos para el div .note dentro de las cards */
+.wrap > .grid > main > section.card .note {
+  margin-top: 12px;
+}
+
+/* Estilos genéricos de .card para otras páginas (About, etc.) */
 .card h2 {
   color: #E0E0E0;
   font-size: clamp(20px, 2.5vw, 28px);

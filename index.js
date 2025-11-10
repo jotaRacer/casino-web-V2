@@ -115,6 +115,7 @@ app.get('/reglas', (req, res) => res.render('rules', { title: 'Reglas' }));
 
 app.get('/perfil', async (req, res) => {
   const userEmail = req.cookies.userEmail;
+
   if (!userEmail) return res.redirect('/login');
   try {
     const usuario = await Usuario.findOne({ email: userEmail });
@@ -122,8 +123,30 @@ app.get('/perfil', async (req, res) => {
       res.clearCookie('userEmail');
       return res.redirect('/login');
     }
+    const historialFormateado = (usuario.apuestas?.slice(-5).reverse() || []).map(apuesta => {
+      let tipoMostrado = 'Apuesta';
+      if (apuesta.tipo === 'numero') {
+        tipoMostrado = 'Número';
+      } else if (apuesta.tipo === 'color_o_seccion') {
+        if (apuesta.valor === 'rojo' || apuesta.valor === 'negro') {
+          tipoMostrado = 'Color';
+        } else if (apuesta.valor === 'par' || apuesta.valor === 'impar') {
+          tipoMostrado = 'Sección';
+        }
+      }
+    
+      return {
+        tipo: tipoMostrado,
+        valor: apuesta.valor,
+        monto: apuesta.monto,
+        resultado: apuesta.resultado.charAt(0).toUpperCase() + apuesta.resultado.slice(1),
+        resultadoColor: apuesta.resultado === 'ganada' ? '#4caf50' : '#f44336'
+      };
+    });
+
     res.render('perfil', {
       email: usuario.email,
+      historialApuestas: historialFormateado,
       fechaNacimiento: usuario.dob,
       ciudad: "Santiago, Chile",
       saldo: usuario.saldo ?? 0,

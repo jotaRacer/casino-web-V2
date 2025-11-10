@@ -37,6 +37,29 @@
       </tbody>
     </table>
   </div>
+  <div class="ruleta-info-card">
+      <h3 class="titulo-info-ruleta">Historial de Apuestas</h3>
+      <table class="apuestas-table">
+        <thead>
+          <tr>
+            <th>Tipo</th>
+            <th>Valor</th>
+            <th>Monto</th>
+            <th>Resultado</th>
+          </tr>
+        </thead>
+        <tbody id="historial-body">
+          {{#each historialApuestas}}
+          <tr>
+            <td>{{this.tipo}}</td>
+            <td>{{this.valor}}</td>
+            <td>${{formatCLP this.monto}}</td> 
+            <td style="color: {{this.resultadoColor}};">{{this.resultado}}</td>
+          </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </div>
 
   <div class="perfil-actions">
     <a href="/ruleta" class="btn-ruleta">Ir a la Mesa de Ruleta</a>

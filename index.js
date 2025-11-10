@@ -94,7 +94,9 @@ app.post('/login', async (req, res) => {
   const { email, password } = req.body;
   try {
     const usuario = await Usuario.findOne({ email, password });
-    if (!usuario) return res.send('Credenciales inválidas. <a href="/login">Intentar de nuevo</a>');
+    if (!usuario) return res.render('login', {
+      errorMessage: 'Correo o contraseña incorrectos.'
+    });
     res.cookie('userEmail', usuario.email, { maxAge: 900000, httpOnly: true });
     res.redirect('/perfil');
   } catch (err) {

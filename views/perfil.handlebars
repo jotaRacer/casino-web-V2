@@ -8,7 +8,6 @@
   <div class="perfil-info">
     <h2>Información Personal</h2>
     <p><strong>Fecha de nacimiento:</strong> {{fechaNacimiento}}</p>
-    <p><strong>Ciudad:</strong> Santiago, Chile</p>
   </div>
 
   <div class="perfil-saldo">
@@ -51,6 +50,7 @@
         <tbody id="historial-body">
           {{#each historialApuestas}}
           <tr>
+
             <td>{{this.tipo}}</td>
             <td>{{this.valor}}</td>
             <td>${{formatCLP this.monto}}</td> 

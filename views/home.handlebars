@@ -8,22 +8,27 @@
                 de una experiencia inmersiva desde la comodidad de tu hogar.
             </p>
             <div class="casino-home-cta-buttons">
-                <a href="/register" class="casino-home-btn casino-home-btn-primary">Registrarse Ahora</a>
-                <a href="/login" class="casino-home-btn casino-home-btn-outline">Acceder al Casino</a>
+    {{#if isAuthenticated}}
+        <a href="/ruleta" class="casino-home-btn casino-home-btn-primary casino-home-btn-lg">
+         Comenzar a jugar
+        </a>
+    {{else}}
+        <a href="/register" class="casino-home-btn casino-home-btn-primary">Registrarse Ahora</a>
+        <a href="/login" class="casino-home-btn casino-home-btn-outline">Acceder al Casino</a>
+    {{/if}}
             </div>
         </div>
     </section>
     <section class="casino-home-nav-section">
         <div class="casino-home-container">
             <div class="casino-home-cards-grid">
-                <a href="/register" class="casino-home-card">
-                    <div class="casino-home-card-icon">
-                        <span>👤</span>
-                    </div>
-                    <h3>Registro de Usuario</h3>
-                    <p>Crea tu cuenta y comienza a jugar en nuestro casino online</p>
-                </a>
-
+                {{#unless isAuthenticated}}
+         <a href="/register" class="casino-home-card">
+         <div class="casino-home-card-icon"><span>👤</span></div>
+         <h3>Registro de Usuario</h3>
+         <p>Crea tu cuenta y comienza a jugar en nuestro casino online</p>
+         </a>
+         {{/unless}}
                 <a href="/ruleta" class="casino-home-card">
                     <div class="casino-home-card-icon">
                         <span>🎰</span>
@@ -50,24 +55,3 @@
             </div>
         </div>
     </section>
-    <section class="casino-home-about-section">
-        <div class="casino-home-container">
-            <div class="casino-home-about-card">
-                <div class="casino-home-about-header">
-                    <div class="casino-home-about-divider"></div>
-                    <h2>Sobre Nosotros</h2>
-                </div>
-                <p class="casino-home-about-text">
-                    Bienvenido a Casino Royale Online, una plataforma diseñada para recrear la emoción y elegancia de un
-                    casino moderno desde la comodidad de tu pantalla. Nuestro objetivo es ofrecer una experiencia inmersiva
-                    donde los usuarios puedan explorar mesas virtuales, ruletas y máquinas tragamonedas en un entorno
-                    digital atractivo y seguro.
-                </p>
-            </div>
-        </div>
-    </section>
-    <footer class="casino-home-footer">
-        <div class="casino-home-container">
-            <p>&copy; 2025 Casino Web creado con fines educativos. Todos los derechos reservados.</p>
-        </div>
-    </footer>

@@ -79,6 +79,11 @@ app.use(async (req, res, next) => {
   }
   next();
 });
+app.use((req, res, next) => {
+  const userEmail = req.cookies.userEmail || null;
+  res.locals.isAuthenticated = Boolean(userEmail);
+  next();
+});
 
 // --- 5. RUTAS DE AUTENTICACIÓN ---
 app.get('/register', (req, res) => res.render('register'));

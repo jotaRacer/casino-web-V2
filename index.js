@@ -2,12 +2,13 @@ const express = require('express');
 const { engine } = require('express-handlebars');
 const cookieParser = require('cookie-parser');
 const mongoose = require('mongoose');
+const path = require('path');
+const bcrypt = require('bcrypt');
 
 // --- 1. CONFIGURACIÓN INICIAL ---
 const app = express();
-const port = 3000;
+const port = 8080;
 
-const path = require('path');
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Middlewares para leer datos del cliente
@@ -26,7 +27,7 @@ app.engine('handlebars', engine({
         currency: 'CLP',
         maximumFractionDigits: 0
       }).format(Number(v ?? 0)),
-    eq: (a, b) => a === b  // <- agregado para arreglar el error “Missing helper: eq”
+    eq: (a, b) => a === b
   },
 }));
 app.set('view engine', 'handlebars');
@@ -46,6 +47,8 @@ mongoose.connect('mongodb+srv://jokum:290804@joaquin.o9eq1qt.mongodb.net/?retryW
 
 // --- 3. DEFINICIÓN DEL MODELO DE USUARIO ---
 const UsuarioSchema = new mongoose.Schema({
+  firstName: String, // Asegúrate de tener estos campos si los usas en el registro
+  lastName: String,  // Asegúrate de tener estos campos si los usas en el registro
   email: String,
   password: String,
   saldo: { type: Number, default: 0 },
@@ -71,7 +74,7 @@ app.use(async (req, res, next) => {
   const userEmail = req.cookies.userEmail;
   if (userEmail) {
     const usuario = await Usuario.findOne({ email: userEmail })
-      .select('-password')
+      // .select('-password') evita traer el hash si no se necesita
       .lean();
     if (usuario) {
       res.locals.user = usuario;
@@ -87,21 +90,45 @@ app.use((req, res, next) => {
 
 // --- 5. RUTAS DE AUTENTICACIÓN ---
 app.get('/register', (req, res) => res.render('register'));
+
+// CAMBIO 2: Registro con hashing
 app.post('/register', async (req, res) => {
-  const { email, password, dob } = req.body;
-  const nuevoUsuario = new Usuario({ email, password, dob });
-  await nuevoUsuario.save();
-  res.redirect('/login');
+  const { firstName, lastName, email, password, dob } = req.body;
+  
+  try {
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const nuevoUsuario = new Usuario({ 
+        firstName, 
+        lastName, 
+        email, 
+        password: hashedPassword,
+        dob 
+    });
+    await nuevoUsuario.save();
+    res.redirect('/login');
+  } catch (err) {
+    console.error("Error al registrar:", err);
+    res.status(500).send("Error al registrar usuario");
+  }
 });
 
 app.get('/login', (req, res) => res.render('login'));
+
+// CAMBIO 3: Login con comparación de hash
 app.post('/login', async (req, res) => {
   const { email, password } = req.body;
   try {
-    const usuario = await Usuario.findOne({ email, password });
-    if (!usuario) return res.render('login', {
-      errorMessage: 'Correo o contraseña incorrectos.'
-    });
+    const usuario = await Usuario.findOne({ email });
+    
+    if (!usuario) {
+        return res.render('login', { errorMessage: 'Correo o contraseña incorrectos.' });
+    }
+
+    const match = await bcrypt.compare(password, usuario.password);
+    if (!match) {
+        return res.render('login', { errorMessage: 'Correo o contraseña incorrectos.' });
+    }
+
     res.cookie('userEmail', usuario.email, { maxAge: 900000, httpOnly: true });
     res.redirect('/perfil');
   } catch (err) {
@@ -117,8 +144,19 @@ app.get('/logout', (req, res) => {
 
 // --- 6. RUTAS DE PÁGINAS ---
 app.get('/', (req, res) => res.render('home'));
+app.get('/home', (req, res) => res.render('home'));
+app.get('/casino', (req, res) => res.render('casino'));
 app.get('/nosotros', (req, res) => res.render('about', { title: 'Sobre Nosotros' }));
+app.get('/about', (req, res) => res.render('about', { title: 'Sobre Nosotros' })); 
 app.get('/reglas', (req, res) => res.render('rules', { title: 'Reglas' }));
+app.get('/rules', (req, res) => res.render('rules', { title: 'Reglas' }));
+app.get('/deposito', (req, res) => {
+    const userEmail = req.cookies.userEmail;
+    if (!userEmail) return res.redirect('/login');
+    const saldo = res.locals.user?.saldo ?? 0;
+    res.render('deposito', { saldo });
+});
+
 
 app.get('/perfil', async (req, res) => {
   const userEmail = req.cookies.userEmail;
@@ -152,6 +190,7 @@ app.get('/perfil', async (req, res) => {
     });
 
     res.render('perfil', {
+      firstName: usuario.firstName, // Usamos firstName
       email: usuario.email,
       historialApuestas: historialFormateado,
       fechaNacimiento: usuario.dob,
@@ -170,14 +209,7 @@ app.get('/perfil', async (req, res) => {
 });
 
 // --- DEPÓSITO ---
-app.get('/deposito', (req, res) => {
-  const userEmail = req.cookies.userEmail;
-  if (!userEmail) return res.redirect('/login');
-
-  const saldo = res.locals.user?.saldo ?? 0;
-  res.render('deposito', { title: 'Depositar', saldo });
-});
-
+// (Tu ruta /transaccion ya maneja la vista de depósito, puedes borrar app.get('/deposito') si es redundante)
 app.post('/depositar', async (req, res) => {
   const userEmail = req.cookies.userEmail;
   const amount = Number(req.body.amount);
@@ -219,6 +251,7 @@ app.post('/retirar', async (req, res) => {
 });
 
 // --- RULETA ---
+// (Tu ruta GET /ruleta parece estar bien, solo asegúrate de tener roulette.handlebars o cambiarlo a casino.handlebars si es la misma vista)
 app.get('/ruleta', async (req, res) => {
   const userEmail = req.cookies.userEmail;
   if (!userEmail) {
@@ -272,6 +305,7 @@ app.get('/ruleta', async (req, res) => {
       };
     });
 
+    // IMPORTANTE: Asegúrate de que 'roulette' sea el nombre correcto de tu archivo .handlebars para el juego
     res.render('roulette', { 
       title: 'Ruleta', 
       saldo: usuario.saldo ?? 0,

@@ -7,6 +7,7 @@ const app = express();
 // --- 1. IMPORTAR RUTAS DE API (BACKEND) ---
 const authRoutes = require('./routes/auth.routes');
 const transactionRoutes = require('./routes/transaction.routes');
+const rouletteRoutes = require('./routes/roulette.routes');
 
 // --- 2. CONFIGURACIÓN DE VISTAS (HANDLEBARS) ---
 app.set('views', path.join(__dirname, '../../views'));
@@ -40,6 +41,7 @@ app.use(express.urlencoded({ extended: true }));
 // Estas son las rutas invisibles que usa el JavaScript para guardar datos
 app.use('/api/auth', authRoutes);
 app.use('/api/transactions', transactionRoutes);
+app.use("/api/roulette", rouletteRoutes);
 
 // --- 6. RUTAS DE VISTAS (FRONTEND) ---
 // Aquí definimos qué archivo .handlebars se muestra en cada URL
@@ -82,5 +84,4 @@ app.get('/deposito', (req, res) => {
 app.get('/roulette', (req, res) => {
     res.render('roulette', { title: 'Mesa de Ruleta', user: dummyUser });
 });
-
 module.exports = app;

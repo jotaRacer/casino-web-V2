@@ -47,6 +47,22 @@ async function loadUserInfo() {
             if (correoElement) {
                 correoElement.textContent = user.email;
             }
+
+            // Actualizar fecha de nacimiento
+            const fechaNacimientoElement = document.getElementById('fecha-nacimiento');
+            if (fechaNacimientoElement && user.dob) {
+                // Formatear fecha de YYYY-MM-DD a DD/MM/YYYY
+                const fecha = new Date(user.dob + 'T00:00:00'); // Agregar hora para evitar problemas de zona horaria
+                const fechaFormateada = fecha.toLocaleDateString('es-CL', {
+                    day: '2-digit',
+                    month: '2-digit',
+                    year: 'numeric'
+                });
+                fechaNacimientoElement.textContent = fechaFormateada;
+                console.log('[PERFIL.JS] Fecha de nacimiento actualizada:', fechaFormateada);
+            } else if (fechaNacimientoElement) {
+                fechaNacimientoElement.textContent = 'No disponible';
+            }
         } else if (res.status === 401) {
             removeToken();
             window.location.href = '/login';

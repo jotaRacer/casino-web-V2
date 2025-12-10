@@ -5,6 +5,11 @@ const { NUMEROS_ROJOS, NUMEROS_NEGROS } = require('../utils/constants');
  * POST /api/roulette/bet
  * Realizar una apuesta en la ruleta
  */
+
+exports.getRoulettePage = (req, res) => {
+    res.render('roulette', { title: 'Mesa de Ruleta' });
+};
+
 exports.placeBet = async (req, res, next) => {
     try {
         const { tipo, valor, monto } = req.body;

@@ -4,31 +4,22 @@ const { generateToken } = require('../utils/jwt');
 
 /**
  * POST /api/auth/register
- * Registrar un nuevo usuario
  */
 exports.register = async (req, res, next) => {
     try {
         const { firstName, lastName, email, password, dob } = req.body;
 
-        // Validar campos requeridos
         if (!firstName || !lastName || !email || !password) {
-            return res.status(400).json({
-                message: 'Todos los campos son requeridos'
-            });
+            return res.status(400).json({ message: 'Todos los campos son requeridos' });
         }
 
-        // Verificar si el usuario ya existe
         const existingUser = await Usuario.findOne({ email });
         if (existingUser) {
-            return res.status(400).json({
-                message: 'El email ya está registrado'
-            });
+            return res.status(400).json({ message: 'El email ya está registrado' });
         }
 
-        // Hash de la contraseña
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        // Crear usuario
         const newUser = new Usuario({
             firstName,
             lastName,
@@ -41,12 +32,7 @@ exports.register = async (req, res, next) => {
 
         res.status(201).json({
             message: 'Usuario registrado exitosamente',
-            user: {
-                id: newUser._id,
-                email: newUser.email,
-                firstName: newUser.firstName,
-                lastName: newUser.lastName
-            }
+            user: { id: newUser._id, email: newUser.email }
         });
     } catch (error) {
         next(error);
@@ -55,49 +41,46 @@ exports.register = async (req, res, next) => {
 
 /**
  * POST /api/auth/login
- * Iniciar sesión
  */
 exports.login = async (req, res, next) => {
     try {
         const { email, password } = req.body;
 
-        // Validar campos
         if (!email || !password) {
-            return res.status(400).json({
-                message: 'Email y contraseña son requeridos'
-            });
+            return res.status(400).json({ message: 'Email y contraseña son requeridos' });
         }
 
-        // Buscar usuario
         const user = await Usuario.findOne({ email });
         if (!user) {
-            return res.status(401).json({
-                message: 'Credenciales incorrectas'
-            });
+            return res.status(401).json({ message: 'Credenciales incorrectas' });
         }
 
-        // Verificar contraseña
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
-            return res.status(401).json({
-                message: 'Credenciales incorrectas'
-            });
+            return res.status(401).json({ message: 'Credenciales incorrectas' });
         }
 
-        // Generar token JWT
+        // 1. Generar token JWT
         const token = generateToken({
             userId: user._id,
             email: user.email
         });
 
+        // 2. CONFIGURAR LA COOKIE (Punto clave para que funcione el requireAuth)
+        res.cookie('token', token, {
+    httpOnly: true, // Seguridad contra XSS
+    secure: process.env.NODE_ENV === 'production', 
+    maxAge: 3600000 // 1 hora
+});
+
+        // 3. Respuesta JSON (para el frontend desacoplado)
         res.json({
             message: 'Login exitoso',
-            token,
+            token, // Lo enviamos por si el frontend lo guarda en localStorage
             user: {
                 id: user._id,
                 email: user.email,
                 firstName: user.firstName,
-                lastName: user.lastName,
                 saldo: user.saldo
             }
         });
@@ -108,28 +91,22 @@ exports.login = async (req, res, next) => {
 
 /**
  * POST /api/auth/logout
- * Cerrar sesión (con JWT se maneja en el frontend)
  */
 exports.logout = async (req, res) => {
+    // Limpiamos la cookie del servidor
+    res.clearCookie('token');
     res.json({
-        message: 'Logout exitoso. Elimina el token del cliente.'
+        message: 'Logout exitoso. Cookie eliminada.'
     });
 };
 
 /**
  * GET /api/auth/me
- * Obtener usuario actual autenticado
  */
 exports.getCurrentUser = async (req, res, next) => {
     try {
         const user = await Usuario.findById(req.user.userId).select('-password');
-
-        if (!user) {
-            return res.status(404).json({
-                message: 'Usuario no encontrado'
-            });
-        }
-
+        if (!user) return res.status(404).json({ message: 'Usuario no encontrado' });
         res.json({ user });
     } catch (error) {
         next(error);

@@ -51,12 +51,11 @@ document.getElementById('transactionForm').addEventListener('submit', async (e) 
             alert("Depósito exitoso 💰");
             amountInput.value = '';
 
-            // Actualizar saldo en navbar
+            // Actualizar saldo en navbar (sin símbolo, CSS lo agrega)
             const navbarSaldo = document.getElementById('navbar-saldo');
             if (navbarSaldo) {
                 navbarSaldo.textContent = new Intl.NumberFormat('es-CL', {
-                    style: 'currency',
-                    currency: 'CLP',
+                    style: 'decimal',
                     maximumFractionDigits: 0
                 }).format(data.newBalance);
             }
@@ -97,12 +96,11 @@ document.getElementById('withdrawForm').addEventListener('submit', async (e) => 
             alert("Retiro exitoso 🏦");
             amountInput.value = '';
 
-            // Actualizar saldo en navbar
+            // Actualizar saldo en navbar (sin símbolo, CSS lo agrega)
             const navbarSaldo = document.getElementById('navbar-saldo');
             if (navbarSaldo) {
                 navbarSaldo.textContent = new Intl.NumberFormat('es-CL', {
-                    style: 'currency',
-                    currency: 'CLP',
+                    style: 'decimal',
                     maximumFractionDigits: 0
                 }).format(data.newBalance);
             }

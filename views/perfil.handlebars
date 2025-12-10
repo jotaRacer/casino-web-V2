@@ -1,8 +1,8 @@
 <div class="box-perfil-container">
 
   <div class="perfil-header">
-    <h1>{{user.email}}</h1>
-    <p class="correo">{{user.email}}</p>
+    <h1>Cargando...</h1>
+    <p class="correo"></p>
   </div>
 
   <div class="perfil-info">
@@ -12,7 +12,7 @@
 
   <div class="perfil-saldo">
     <h2>Saldo Actual</h2>
-    <p class="saldo">{{formatCLP (defaultZero user.saldo)}}</p>
+    <p id="perfil-saldo-display">Cargando...</p>
   </div>
 
   <div class="perfil-transacciones">
@@ -26,43 +26,36 @@
         </tr>
       </thead>
       <tbody id="transactionTable">
-        {{#each transacciones}}
         <tr>
-          <td>{{this.fecha}}</td>
-          <td>{{this.tipo}}</td>
-          <td>${{this.monto}}</td>
+          <td colspan="3" style="text-align: center;">Cargando...</td>
         </tr>
-        {{/each}}
       </tbody>
     </table>
   </div>
-  <div class="ruleta-info-card">
-      <h3 class="titulo-info-ruleta">Historial de Apuestas</h3>
-      <table class="apuestas-table">
-        <thead>
-          <tr>
-            <th>Tipo</th>
-            <th>Valor</th>
-            <th>Monto</th>
-            <th>Resultado</th>
-          </tr>
-        </thead>
-        <tbody id="historial-body">
-          {{#each historialApuestas}}
-          <tr>
 
-            <td>{{this.tipo}}</td>
-            <td>{{this.valor}}</td>
-            <td>${{formatCLP this.monto}}</td> 
-            <td style="color: {{this.resultadoColor}};">{{this.resultado}}</td>
-          </tr>
-          {{/each}}
-        </tbody>
-      </table>
-    </div>
+  <div class="ruleta-info-card">
+    <h3 class="titulo-info-ruleta">Historial de Apuestas</h3>
+    <table class="apuestas-table">
+      <thead>
+        <tr>
+          <th>Tipo</th>
+          <th>Valor</th>
+          <th>Monto</th>
+          <th>Resultado</th>
+        </tr>
+      </thead>
+      <tbody id="historial-body">
+        <tr>
+          <td colspan="4" style="text-align: center;">Cargando...</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 
   <div class="perfil-actions">
     <a href="/ruleta" class="btn-ruleta">Ir a la Mesa de Ruleta</a>
-    <a href="/logout" class="btn-ruleta">Cerrar Sesión</a>
+    <a href="/deposito" class="btn-ruleta">Ir a Depósito</a>
   </div>
 </div>
+
+<script src="/js/perfil.js?v=4"></script>

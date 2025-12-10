@@ -1701,10 +1701,9 @@
           const data = await response.json();
           const saldoElement = document.getElementById('navbar-saldo');
           if (saldoElement && data.user) {
-            // Formatear saldo en CLP
+            // Formatear saldo en CLP (sin símbolo, CSS lo agrega)
             const saldoFormateado = new Intl.NumberFormat('es-CL', {
-              style: 'currency',
-              currency: 'CLP',
+              style: 'decimal',
               maximumFractionDigits: 0
             }).format(data.user.saldo || 0);
             saldoElement.textContent = saldoFormateado;

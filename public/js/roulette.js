@@ -1,4 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
+    // Verificar autenticación
+    requireAuth();
+
     const ruleta = document.getElementById("ruleta");
     const bubble = document.querySelector(".bubble-ruleta");
     const estado = document.getElementById("estado-ruleta");
@@ -19,6 +22,95 @@ document.addEventListener("DOMContentLoaded", () => {
     let girando = false;
     let seleccionadas = [];
 
+    // Cargar saldo inicial
+    async function loadBalance() {
+        try {
+            const res = await fetch('/api/auth/me', {
+                headers: getAuthHeaders()
+            });
+
+            if (res.ok) {
+                const data = await res.json();
+                saldoDisplay.textContent = "$" + data.user.saldo.toLocaleString("es-CL");
+            } else if (res.status === 401) {
+                removeToken();
+                window.location.href = '/login';
+            }
+        } catch (error) {
+            console.error('Error cargando saldo:', error);
+        }
+    }
+
+    // Cargar historial de apuestas desde la base de datos
+    async function loadBetHistory() {
+        try {
+            const res = await fetch('/api/roulette/history', {
+                headers: getAuthHeaders()
+            });
+
+            if (res.ok) {
+                const data = await res.json();
+                const bets = data.bets || [];
+
+                historialBody.innerHTML = '';
+                bets.forEach(bet => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${bet.tipo}</td>
+                        <td>${bet.valor}</td>
+                        <td>$${bet.monto}</td>
+                        <td style="color:${bet.resultadoColor};">${bet.resultado}</td>
+                    `;
+                    historialBody.appendChild(row);
+                });
+            } else if (res.status === 401) {
+                removeToken();
+                window.location.href = '/login';
+            }
+        } catch (error) {
+            console.error('Error cargando historial:', error);
+        }
+    }
+
+    // Cargar últimos números ganadores desde la base de datos
+    async function loadWinningNumbers() {
+        try {
+            const res = await fetch('/api/roulette/winners', {
+                headers: getAuthHeaders()
+            });
+
+            if (res.ok) {
+                const data = await res.json();
+                const winners = data.winners || [];
+
+                listaGanadores.innerHTML = '';
+                winners.forEach(winner => {
+                    const div = document.createElement('div');
+                    div.className = 'numero-ganador';
+
+                    if (winner.empty) {
+                        div.classList.add('empty');
+                    } else {
+                        div.textContent = winner.num;
+                        div.classList.add(winner.color);
+                    }
+
+                    listaGanadores.appendChild(div);
+                });
+            } else if (res.status === 401) {
+                removeToken();
+                window.location.href = '/login';
+            }
+        } catch (error) {
+            console.error('Error cargando números ganadores:', error);
+        }
+    }
+
+    // Cargar datos iniciales
+    loadBalance();
+    loadBetHistory();
+    loadWinningNumbers();
+
     // Permitir seleccionar celdas
     document.querySelectorAll(".celda").forEach(celda => {
         celda.addEventListener("click", () => {
@@ -33,6 +125,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
     });
+
     // Manejar apuesta
     apostarBtn.addEventListener("click", async () => {
         if (girando) return;
@@ -57,16 +150,22 @@ document.addEventListener("DOMContentLoaded", () => {
             estado.textContent = "Girando la ruleta...";
             girando = true;
 
-            const res = await fetch("/apostar", {
+            const res = await fetch("/api/roulette/bet", {  // ✅ Endpoint correcto
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
+                headers: getAuthHeaders(),  // ✅ Incluye Authorization: Bearer <token>
                 body: JSON.stringify({ tipo, valor, monto })
             });
 
             const data = await res.json();
 
             if (!res.ok) {
-                const mensajeError = data.error || "Error al conectar con el servidor.";
+                if (res.status === 401) {
+                    alert("Sesión expirada. Por favor inicia sesión nuevamente.");
+                    removeToken();
+                    window.location.href = '/login';
+                    return;
+                }
+                const mensajeError = data.error || data.message || "Error al conectar con el servidor.";
                 estado.textContent = `⚠️ ${mensajeError}`;
                 girando = false;
                 return;
@@ -92,6 +191,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
 
                 saldoDisplay.textContent = "$" + data.nuevoSaldo.toLocaleString("es-CL");
+                // Actualizar navbar (sin símbolo $, CSS lo agrega)
                 if (navbarsaldo) navbarsaldo.textContent = data.nuevoSaldo.toLocaleString("es-CL");
 
                 if (bubble) {

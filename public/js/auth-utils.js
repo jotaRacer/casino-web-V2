@@ -1,12 +1,11 @@
 /**
- * Utilidades para manejo de autenticación JWT
+ * Utilidades para manejo de autenticación JWT con localStorage
  */
 
 const AUTH_TOKEN_KEY = 'casino_auth_token';
 
 /**
  * Guardar token JWT en localStorage
- * @param {string} token - Token JWT a guardar
  */
 function saveToken(token) {
     localStorage.setItem(AUTH_TOKEN_KEY, token);
@@ -14,14 +13,13 @@ function saveToken(token) {
 
 /**
  * Obtener token JWT de localStorage
- * @returns {string|null} Token JWT o null si no existe
  */
 function getToken() {
     return localStorage.getItem(AUTH_TOKEN_KEY);
 }
 
 /**
- * Eliminar token JWT de localStorage (logout)
+ * Eliminar token JWT de localStorage
  */
 function removeToken() {
     localStorage.removeItem(AUTH_TOKEN_KEY);
@@ -29,15 +27,13 @@ function removeToken() {
 
 /**
  * Verificar si el usuario está autenticado
- * @returns {boolean} true si hay token, false si no
  */
 function isAuthenticated() {
     return !!getToken();
 }
 
 /**
- * Obtener headers con Authorization Bearer para peticiones autenticadas
- * @returns {Object} Headers con Authorization
+ * Obtener headers con Authorization Bearer
  */
 function getAuthHeaders() {
     const token = getToken();
@@ -50,14 +46,21 @@ function getAuthHeaders() {
 /**
  * Hacer logout completo
  */
-function logout() {
+async function logout() {
+    try {
+        await fetch('/api/auth/logout', {
+            method: 'POST',
+            headers: getAuthHeaders()
+        });
+    } catch (error) {
+        console.error('Error en logout:', error);
+    }
     removeToken();
     window.location.href = '/login';
 }
 
 /**
- * Verificar si el usuario debe estar autenticado para esta página
- * Si no está autenticado, redirige al login
+ * Verificar autenticación requerida
  */
 function requireAuth() {
     if (!isAuthenticated()) {
@@ -66,8 +69,7 @@ function requireAuth() {
 }
 
 /**
- * Si el usuario ya está autenticado, redirigir a perfil
- * Útil para páginas de login/register
+ * Redirigir si ya está autenticado
  */
 function redirectIfAuthenticated() {
     if (isAuthenticated()) {

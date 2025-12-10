@@ -60,23 +60,16 @@ exports.login = async (req, res, next) => {
             return res.status(401).json({ message: 'Credenciales incorrectas' });
         }
 
-        // 1. Generar token JWT
+        // Generar token JWT
         const token = generateToken({
             userId: user._id,
             email: user.email
         });
 
-        // 2. CONFIGURAR LA COOKIE (Punto clave para que funcione el requireAuth)
-        res.cookie('token', token, {
-    httpOnly: true, // Seguridad contra XSS
-    secure: process.env.NODE_ENV === 'production', 
-    maxAge: 3600000 // 1 hora
-});
-
-        // 3. Respuesta JSON (para el frontend desacoplado)
+        // Respuesta JSON con token (frontend lo guarda en localStorage)
         res.json({
             message: 'Login exitoso',
-            token, // Lo enviamos por si el frontend lo guarda en localStorage
+            token,
             user: {
                 id: user._id,
                 email: user.email,
@@ -93,10 +86,10 @@ exports.login = async (req, res, next) => {
  * POST /api/auth/logout
  */
 exports.logout = async (req, res) => {
-    // Limpiamos la cookie del servidor
-    res.clearCookie('token');
+    // Con JWT en localStorage, el frontend elimina el token
+    // Este endpoint solo confirma el logout
     res.json({
-        message: 'Logout exitoso. Cookie eliminada.'
+        message: 'Logout exitoso'
     });
 };
 

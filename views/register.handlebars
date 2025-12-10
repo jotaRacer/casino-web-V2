@@ -3,7 +3,7 @@
         <h1>Registrarse</h1>
     </div>
     <p class="frase">Únete a una experiencia única</p>
-    <form id="registrationForm" method="post" action="/register">
+    <form id="registrationForm">
         <div class="form-row">
             <div class="form-group">
                 <label for="firstName">Nombre de usuario</label>
@@ -23,7 +23,8 @@
             </div>
             <div class="form-group">
                 <label for="confirmPassword">Confirmar Contraseña</label>
-                <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirme su contraseña" required>
+                <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirme su contraseña"
+                    required>
             </div>
             <div class="form-group">
                 <label for="dob">Fecha de Nacimiento</label>
@@ -34,3 +35,6 @@
         <p class="alt-link">¿Ya tienes una cuenta? <a href="/login">Iniciar Sesión</a></p>
     </form>
 </div>
+
+<script src="/js/auth-utils.js"></script>
+<script src="/js/register.js"></script>

@@ -67,6 +67,11 @@ app.get('/rules', (req, res) => {
     res.render('rules', { title: 'Reglas del Juego' });
 });
 
+app.get('/test-auth', (req, res) => {
+    res.render('test-auth', { title: 'Test de Autenticación' });
+});
+
+
 // -- Rutas Privadas (Simuladas por ahora) --
 // Pasamos un usuario falso (dummyUser) para que las páginas no den error
 // al intentar mostrar el saldo o el nombre antes de que hagas login real.

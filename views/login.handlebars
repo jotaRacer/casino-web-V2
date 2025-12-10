@@ -1,21 +1,16 @@
-<form action="/login" method="post" class="login-form">
+<form class="login-form" id="loginForm">
     <div class="login-box">
         <h1 class="login-title">Inicio de Sesión</h1>
 
         <div class="login-form-group">
             <label for="login-email">Correo Electrónico</label>
-            {{! El 'name="email"' es crucial para que el servidor reciba el dato }}
             <input type="email" id="login-email" name="email" placeholder="Ingrese su correo" class="login-input" required>
         </div>
 
         <div class="login-form-group">
             <label for="login-password">Contraseña</label>
-            {{! El 'name="password"' también es crucial }}
             <input type="password" id="login-password" name="password" placeholder="Ingrese su contraseña" class="login-input" required>
         </div>
-        {{#if errorMessage}}
-        <p style="color: red; font-weight: bold;">{{errorMessage}}</p>
-        {{/if}}
 
         <button type="submit" class="login-submit-btn">Iniciar sesión</button>
 
@@ -23,3 +18,5 @@
     </div>
 </form>
 
+<script src="/js/auth-utils.js"></script>
+<script src="/js/login.js"></script>

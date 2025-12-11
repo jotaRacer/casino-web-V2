@@ -5,9 +5,9 @@ const { engine } = require('express-handlebars');
 
 const app = express();
 
-// ==========================================
+
 // 1. CONFIGURACIÓN DE VISTAS (HANDLEBARS)
-// ==========================================
+
 app.engine('handlebars', engine({
     defaultLayout: 'main',
     helpers: {
@@ -26,9 +26,8 @@ app.engine('handlebars', engine({
 app.set('view engine', 'handlebars');
 app.set('views', path.join(__dirname, '../../views'));
 
-// ==========================================
 // 2. MIDDLEWARES BÁSICOS Y ESTÁTICOS
-// ==========================================
+
 app.use(express.static(path.join(__dirname, '../../public')));
 app.use(cors({
     origin: process.env.FRONTEND_URL || 'http://localhost:8080',
@@ -37,16 +36,13 @@ app.use(cors({
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// ==========================================
 // 3. RUTAS DE API (BACKEND)
-// ==========================================
+
 app.use('/api/auth', require('./routes/auth.routes'));
 app.use('/api/transactions', require('./routes/transaction.routes'));
 app.use("/api/roulette", require('./routes/roulette.routes'));
 
-// ==========================================
 // 4. RUTAS DE VISTAS (FRONTEND)
-// ==========================================
 
 // --- Rutas Públicas ---
 app.get('/', (req, res) => res.render('home', { title: 'Casino Royale' }));
